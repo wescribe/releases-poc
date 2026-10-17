@@ -13,7 +13,7 @@ The POC is a static site that fakes what a future Next.js app will render. There
 
 ## Goals
 
-- Show an index page and three release-note pages, rendered from markdown with custom layout directives.
+- Show an index page and five release-note pages, rendered from markdown with custom layout directives. The three newest are the showcase; the two oldest seed the index and the "What's new" rows so the site has history.
 - Prove the round trip: markdown with directives renders to a rich layout, and the same source exports to clean standard markdown.
 - Demonstrate two section layouts, single column and multi-column, and one custom block, the callout.
 - Look and feel in the family of Mintlify docs, aimed at a non-technical customer.
@@ -23,7 +23,7 @@ The POC is a static site that fakes what a future Next.js app will render. There
 ## Non-goals
 
 - No editor, no authoring UI, no drag and drop, no slash commands. The IDEAS.md file collects editor ideas for later.
-- No search. The POC has three pages.
+- No search. The POC has a handful of pages.
 - No carousel, feature card, image-with-caption block or modal behavior yet. These are planned block types and are described in the README as planned, not built.
 - No real screenshots or video. Hero visuals and in-page images are generated placeholders the team can swap later.
 - No Next.js, no React. A small Node build script and plain HTML, CSS and JavaScript.
@@ -41,7 +41,7 @@ Things that would make this a failure even if it technically works:
 
 - Static output served by GitHub Pages. No server at request time.
 - Repository: https://github.com/wescribe/releases-poc, working folder /Users/peterlockhart/projects/wescribe-releases-poc. The repository exists, the first commit is pushed, and the product owner has admin rights. The product owner is making the repository public so GitHub Pages is available on the organization's free plan. The site will live at `https://wescribe.github.io/releases-poc/`.
-- Content is for Spokenote, the first customer-style example. The v2.19.0 release (deployed 2026-09-29) was supplied as plain text by the product owner and is committed verbatim at `content/source/v2.19.0.txt`. That file is the source of truth. The builder may add a customer-facing headline and summary, tighten wording for a customer audience, and arrange the text into sections, but must not drop or invent items. The v2.18.0 release (deployed 2026-09-01) is committed the same way at `content/source/v2.18.0.txt`. The v2.17.0 release (deployed 2026-07-14) is at `content/source/v2.17.0.txt`. All three source files are now in the repo, so no placeholder releases are needed. Note that v2.17.0 is much shorter than the other two; its page will have fewer sections, and that is fine.
+- Content is for Spokenote, the first customer-style example. The v2.19.0 release (deployed 2026-09-29) was supplied as plain text by the product owner and is committed verbatim at `content/source/v2.19.0.txt`. That file is the source of truth. The builder may add a customer-facing headline and summary, tighten wording for a customer audience, and arrange the text into sections, but must not drop or invent items. The v2.18.0 release (deployed 2026-09-01) is committed the same way at `content/source/v2.18.0.txt`. The v2.17.0 release (deployed 2026-07-14) is at `content/source/v2.17.0.txt`. Two older releases are still to come from the product owner and will be committed the same way, giving five release pages in all. Older and shorter releases get fewer sections, and that is fine. If the two older releases have not arrived when the build reaches content, the builder builds the three that exist and adds the others when they land.
 - No personal data anywhere in content or placeholders.
 - Everything a visitor sees must work on a phone.
 
@@ -141,7 +141,7 @@ Top to bottom:
 1. The 16:9 hero visual, full content width. The first thing on the page.
 2. Date as a small eyebrow, then the headline as the page title, then the summary as a lead paragraph, then the version as a small muted line.
 3. The sections, in order.
-4. A "What's new" row spanning the full width beneath the content and the rail, with one card per other release: its 16:9 visual, headline, summary and month. Newest first.
+4. A "What's new" row spanning the full width beneath the content and the rail, showing the two most recent other releases as cards with their 16:9 visual, headline, summary and month, plus a link to the index for the full list.
 5. The footer.
 
 A right-hand "On this page" rail sits beside the content column, built from the level-two headings in the page. It is sticky and highlights the heading currently in view.
@@ -152,7 +152,7 @@ The content column is roughly 700px wide. Two columns are comfortable at that wi
 
 1. A short introduction, one or two sentences from a small index front matter or config file.
 2. The newest release as a wide hero card: its 16:9 visual on one side, headline, summary, month and a link on the other.
-3. The remaining releases as a card grid, each with its 16:9 visual, headline, summary and month.
+3. The remaining releases as a card grid, two per row, each with its 16:9 visual, headline, summary and month. Newest first.
 4. The footer.
 
 ### Responsive behavior
@@ -181,13 +181,13 @@ The content column is roughly 700px wide. Two columns are comfortable at that wi
 
 These were not discussed and can be changed without reopening the design:
 
-- Top bar carries only the wordmark and theme toggle. The mockups showed a search field; it is dropped because a search box over three pages would be fake.
+- Top bar carries only the wordmark and theme toggle. The mockups showed a search field; it is dropped because a search box over five pages would be fake.
 - Callout types are note, tip and warning, differing only in color.
 - The export drops the hero image and writes date and version on one line under the summary.
 - Nesting uses extra colons on the outer fence, the standard remark-directive convention.
 - Hero visuals are generated SVG placeholders, committed to the repo.
 - Deployment is by GitHub Actions rather than a committed `dist/` folder.
-- Three-column sections are supported in the parser and CSS but none of the three POC pages needs to use one.
+- Three-column sections are supported in the parser and CSS but none of the POC pages needs to use one.
 - Unknown directives render visibly with a build warning rather than failing the build.
 
 ## Left to the builder
