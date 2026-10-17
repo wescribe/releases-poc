@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Full-screen editor with live preview">
+<defs><linearGradient id="g" gradientTransform="rotate(259 0.5 0.5)"><stop offset="0" stop-color="#dbeafe"/><stop offset="1" stop-color="#dcfce7"/></linearGradient></defs>
+<rect width="1200" height="900" fill="url(#g)"/>
+<circle cx="795" cy="522" r="420" fill="#86efac" opacity="0.34"/>
+<rect x="-265" y="423.5" width="636" height="217" rx="54" fill="#86efac" opacity="0.58"/>
+<circle cx="13" cy="201" r="424" fill="#86efac" opacity="0.52"/>
+<circle cx="335" cy="606" r="241" fill="#86efac" opacity="0.44"/>
+<circle cx="619" cy="513" r="368" fill="#86efac" opacity="0.37"/>
+<text x="60" y="828" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="41" font-weight="600" fill="#0f172a" opacity="0.7">Full-screen editor with live preview</text>
+</svg>

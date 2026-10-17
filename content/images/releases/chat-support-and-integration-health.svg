@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Placeholder visual">
+<defs><linearGradient id="g" gradientTransform="rotate(196 0.5 0.5)"><stop offset="0" stop-color="#dcfce7"/><stop offset="1" stop-color="#fef9c3"/></linearGradient></defs>
+<rect width="1600" height="900" fill="url(#g)"/>
+<rect x="-97" y="559" width="544" height="202" rx="51" fill="#fde68a" opacity="0.29"/>
+<circle cx="190" cy="627" r="431" fill="#fde68a" opacity="0.52"/>
+<rect x="-184" y="544.5" width="856" height="483" rx="121" fill="#fde68a" opacity="0.55"/>
+<rect x="290" y="394.5" width="498" height="163" rx="41" fill="#fde68a" opacity="0.37"/>
+<circle cx="46" cy="259" r="323" fill="#fde68a" opacity="0.54"/>
+
+</svg>
