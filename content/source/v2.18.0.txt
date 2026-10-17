@@ -1,0 +1,55 @@
+v2.18.0 Production Release Notes
+----------
+This release was deployed to production early this morning (9/1/26)
+
+Sweepstakes
+The functionality initially built to support Bud Light’s Upgrade Your Gameday sweepstake is live and ready for use with other organizations.
+
+Instant-win sweepstakes - Someone scans a QR code, confirms their age, and finds out immediately if they've won a prize.
+Age gate - Before anyone can play, they confirm they meet the campaign's minimum age; anyone who doesn't pass is blocked from entering, no exceptions.
+Dynamic page content - The page a visitor lands on isn't one static page — it's personalized in real time based on their outcome (win, lose, already played, region-specific content blocks, etc.), pulling in the right message, prize details, or next steps automatically.
+Two ways to pick a winner - Either fixed odds rolled the moment someone plays (like a scratch ticket), or prizes secretly pre-scheduled to random moments in time, won by whoever plays first after that moment hits - the latter was added to satisfy a sponsor's legal requirement to avoid gambling-style odds.
+Built to be provably fair - The randomness is tested and documented to the same standard the gaming-industry uses, so if a result is ever challenged, Spokenote can prove it wasn't rigged.
+Nothing can be faked or double-counted - Fraud/bot checks gate entries, every play is permanently logged, and safeguards stop duplicate plays or leftover prizes from accidentally rolling over to give someone an extra win.
+Campaign configurations - Age minimums, entry limits, odds, and scheduling are all settings on the campaign. No engineering work needed to launch a new sweepstakes.
+
+
+
+
+Campaigns
+
+Campaign Overview - Reworked page layout with the addition of more information about the campaign.
+Campaign Field Mapping - Added field search to filter large lists of fields instantly. 
+HubSpot
+Property and group sorting - Hubspot property groups are now sorted alphabetically and as are the individual properties within each group
+Internal name - On any campaign created from today forward via the Hubspot integration, the campaign overview will now display the “internal name” for the property as “CRM Field” with a button to copy it to your clipboard. This replaces the  need to dig through Hubspot to get that value.
+
+
+
+Pages
+
+Create Page rage clicking - The “Create Page” button is now disabled after the initial click to prevent rage-clicking from creating multiple copies of the page
+Preview Images - Page preview images (thumbnails and link unfurls) now load instantly and update automatically within a minute of publishing new content. Previews are also consistent everywhere a page appears, from the pages overview to shared link previews in texts and emails.
+
+
+Block Editor
+
+Text block formatting options - Text blocks now support basic formatting written in Markdown notation: clickable links (which open in a new tab), bold, italics, headings, and lists. What you can't do: embed images, use raw HTML (it displays as plain text and never executes). There is not a WYSIWYG formatting bar in the UI yet. 
+
+
+Dashboard
+
+Dashboard Sessions - Sessions are now sorted by latest activity by default
+
+
+Users 
+
+Invites - Added email validation for the "Invite User" form
+
+
+Bug Fixes
+
+Access Page Privacy Controls - The privacy consent drawer on the access page tries to read saved browser settings in a spot where they don't exist yet (on the server, before the page reaches the visitor's browser), causing an error in the server logs on every page load since March. This fix adds a one-line check to skip that read on the server, since the component already re-reads the correct saved settings once it loads in the browser.
+Video Player controls - Some of the controls such as the play and pause buttons were misaligned in the video player UI. These have been fixed.
+Review Your Video fullscreen - "Review Your Video" fullscreen mode now displays the video controls as expected like other instances of the Spokenote video player.
+Preview query parameter - The “?preview” query parameter is now blocking user activity tracking as expected.
