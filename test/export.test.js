@@ -55,3 +55,9 @@ test('raw HTML in content does not appear as HTML in the export', () => {
   assert.match(out, /bold/)
   assert.match(out, /block/)
 })
+
+test('a release without a version has a date-only metadata line', () => {
+  const out = exportMarkdown({ ...release, version: null, body: 'Body.' })
+  assert.match(out, /\nReleased September 29, 2026\n\nBody\./)
+  assert.doesNotMatch(out, /Version/)
+})

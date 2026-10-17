@@ -2,7 +2,8 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import matter from 'gray-matter'
 
-const REQUIRED = ['title', 'summary', 'date', 'version', 'hero']
+// version is optional: standalone tools ship without one.
+const REQUIRED = ['title', 'summary', 'date', 'hero']
 
 export class ContentError extends Error {
   constructor(file, field, reason = `missing required front matter field "${field}"`) {
@@ -35,9 +36,9 @@ function normalizeDate(value, file) {
 
 // YAML reads "version: 2.10" as the number 2.1. Take the text as written.
 function rawVersion(raw, parsed) {
+  if (parsed === undefined || parsed === null || parsed === '') return null
   const match = raw.match(/^version:[ \t]*(.+?)[ \t]*$/m)
-  const text = match ? match[1].replace(/^["']|["']$/g, '') : String(parsed)
-  return text
+  return match ? match[1].replace(/^["']|["']$/g, '') : String(parsed)
 }
 
 async function readRelease(file) {

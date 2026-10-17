@@ -1,0 +1,15 @@
+Email HTML Formatter
+----------
+Released 9/8/2026. Standalone tool, not versioned.
+
+PLACEHOLDER DRAFT. Written from the public tool page at https://emailhtml.spokenote.com on 2026-10-17. Replace with the real release notes when available.
+
+Email HTML Formatter - A new standalone tool at emailhtml.spokenote.com that generates the email HTML for embedding each recipient's personal Spokenote video in a campaign sent from your email platform. Pick your platform, point it at the field that holds each recipient's Spokenote page URL, set a fallback, adjust the thumbnail, and copy the HTML.
+
+Choose your platform - Select the email platform you send from. Mailchimp is available at launch.
+Specify your variable - Tell the tool which custom field holds each recipient's unique Spokenote page URL. This is the SN_URL column from your Spokenote CSV export, and the URL starts with https://spkno.co/a/.
+Conditional fallback - Decide what a recipient sees when their field has no value, instead of a broken link: nothing, or a fallback video. Choosing the video option asks for a fallback Spokenote page URL.
+Max width - Control how large the video thumbnail appears in the email, in pixels.
+Alt text - Describe the thumbnail for screen readers and for recipients who have images turned off.
+Alignment - Place the thumbnail on the left, center, or right.
+Copy HTML - The generated HTML, formatted for your platform, appears in a panel with a Copy HTML button. Paste it into a code block in your email template.

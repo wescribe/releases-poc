@@ -220,7 +220,10 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 }
 .share-menu[hidden] { display: none; }
 .share-menu li { margin: 0; }
-.share-menu a { display: block; padding: 7px 10px; border-radius: 6px; color: var(--text); font-size: 14px; }
+.share-menu a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 6px; color: var(--text); font-size: 14px; }
+.share-icon { display: inline-flex; width: 16px; height: 16px; color: var(--muted); flex: none; }
+.share-icon svg { width: 16px; height: 16px; }
+.share-menu a:hover .share-icon, .share-menu a:focus-visible .share-icon { color: var(--accent); }
 .share-menu a:hover, .share-menu a:focus-visible { background: var(--surface); color: var(--accent); text-decoration: none; outline: none; }
 
 /* What's new row */
@@ -230,7 +233,7 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 .all-releases { font-size: 15px; }
 
 /* Carousel (What's new): two cards per view, one card per step, no looping */
-.carousel { position: relative; --carousel-gap: 24px; --per-view: 2; }
+.carousel { position: relative; --carousel-gap: 24px; --per-view: 2; container-type: inline-size; }
 .carousel-viewport { overflow: hidden; }
 .carousel-track { display: flex; gap: var(--carousel-gap); transition: transform 320ms ease; will-change: transform; }
 .carousel-track > .card { flex: 0 0 calc((100% - var(--carousel-gap) * (var(--per-view) - 1)) / var(--per-view)); }
@@ -302,8 +305,11 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
   .rail { display: none; }
   .columns-2, .columns-3, .card-grid, .hero-card { grid-template-columns: minmax(0, 1fr); }
   .carousel { --per-view: 1; }
-  .carousel-prev { left: 8px; }
-  .carousel-next { right: 8px; }
+  /* One card fills the carousel width, so its 16:9 cover is 100cqw * 9/16 tall.
+     Center the arrows on that cover rather than on the whole card. */
+  .carousel-btn { top: calc(100cqw * 9 / 32); }
+  .carousel-prev { left: 12px; }
+  .carousel-next { right: 12px; }
   .headline { font-size: 32px; }
   .lead { font-size: 18px; }
   .hero-card-body { padding: 20px; }

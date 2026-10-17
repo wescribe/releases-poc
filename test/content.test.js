@@ -50,3 +50,9 @@ test('a date that is not a plain YYYY-MM-DD day is rejected with the file and fi
       err instanceof ContentError && err.file.endsWith(f) && err.field === 'date' && /YYYY-MM-DD/.test(err.message))
   }
 })
+
+test('version is optional: a release without one loads with version null', async () => {
+  const [r] = await loadReleases(tempDirWith('no-version.md'))
+  assert.equal(r.version, null)
+  assert.equal(r.title, 'No version headline')
+})

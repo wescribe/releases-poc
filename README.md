@@ -47,7 +47,7 @@ Each slot holds **blocks**:
 
 ### Front matter
 
-Every file in `content/releases/` declares five fields. The file name is the URL slug.
+Every file in `content/releases/` declares these fields. The file name is the URL slug. `version` is optional, for standalone tools that ship without one; when it is absent the page shows no version pill and the export's metadata line carries only the date.
 
 ```yaml
 ---
@@ -59,7 +59,7 @@ hero: /images/releases/draft-pages-before-you-publish.svg   # 16:9 visual used o
 ---
 ```
 
-The build fails with a message naming the file and the field if any of the five is missing, or if `date` is not a plain `YYYY-MM-DD` day. `version` is read as written, so `2.10` stays `2.10`.
+The build fails with a message naming the file and the field if `title`, `summary`, `date` or `hero` is missing, or if `date` is not a plain `YYYY-MM-DD` day. `version` is read as written, so `2.10` stays `2.10`.
 
 ## The stored format
 
@@ -215,7 +215,7 @@ Every link and asset URL in the templates is prefixed by the base path, and root
 ## Adding a release
 
 1. Save the original notes as `content/source/vX.Y.Z.txt`.
-2. Create `content/releases/<slug>.md` with the five front matter fields and the body, using the directives above.
+2. Create `content/releases/<slug>.md` with the front matter fields and the body, using the directives above.
 3. Generate a hero: `node scripts/make-placeholder.js <slug> content/images/releases/<slug>.svg`. In-page images take `--ratio 4:3 --label "..."`.
-4. Add the version and slug pair to `test/content-integrity.test.js`. It checks that every item lead-in in the source (the text before the first ` - ` on a line) survives into the export, that the render has no warnings, and that every referenced image exists. It does not compare item bodies, so read the page against the source once by eye.
+4. Add a `[source file, slug, version or null]` entry to `test/content-integrity.test.js`. It checks that every item lead-in in the source (the text before the first ` - ` on a line) survives into the export, that the render has no warnings, and that every referenced image exists. It does not compare item bodies, so read the page against the source once by eye.
 5. `npm test`, then `npm run dev` and look.

@@ -47,7 +47,7 @@ export function exportMarkdown(release) {
     '',
     release.summary,
     '',
-    `Released ${formatDate(release.date)} · Version ${release.version}`,
+    release.version ? `Released ${formatDate(release.date)} · Version ${release.version}` : `Released ${formatDate(release.date)}`,
     '',
   ].join('\n')
   return `${header}\n${String(body).trim()}\n`

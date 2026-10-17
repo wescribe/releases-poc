@@ -54,8 +54,9 @@ test("release page order: hero, date, headline, summary, version, sections, what
   assert.doesNotMatch(html.split('<aside')[0], /View as markdown/)
   const rail = html.match(/<aside class="rail">[\s\S]*<\/aside>/)[0]
   assert.match(rail, /<button class="share-toggle"[^>]*aria-expanded="false"[^>]*>Share this page<\/button>/)
+  assert.ok(rail.indexOf('Share this page') < rail.indexOf('View as markdown'), 'share comes before export')
   assert.match(rail, /<ul class="share-menu"[^>]*hidden[^>]*data-message="Alpha headline: Alpha summary\."[^>]*>/)
-  for (const n of ['facebook', 'x', 'linkedin', 'whatsapp', 'telegram', 'email', 'sms']) assert.match(rail, new RegExp(`data-share="${n}"`))
+  for (const n of ['facebook', 'x', 'linkedin', 'whatsapp', 'telegram', 'email', 'sms']) assert.match(rail, new RegExp(`data-share="${n}"[^>]*><span class="share-icon"><svg`))
   assert.match(html, /<p class="version"><span class="version-pill">Version 2\.19\.0<\/span><\/p>/)
   assert.match(html, /href="\/poc\/assets\/styles\.css"/)
   assert.match(html, /<a class="wordmark" href="\/poc\/" aria-label="Spokenote release notes">\s*<svg[^>]*class="logo"/)
@@ -87,6 +88,15 @@ test("a single release still builds, with no grid and no what's new row", () => 
   assert.doesNotMatch(read1('index.html'), /card-grid/)
   assert.match(read1('index.html'), /hero-card/)
   assert.doesNotMatch(read1('releases/alpha/index.html'), /What's new/)
+})
+
+test('a release without a version shows no version pill', async () => {
+  const dir = contentDirWith('no-version.md')
+  const o = fs.mkdtempSync(path.join(os.tmpdir(), 'poc-dist3-'))
+  await buildSite({ contentDir: dir, outDir: o, base: '/' })
+  const html = fs.readFileSync(path.join(o, 'releases/no-version/index.html'), 'utf8')
+  assert.doesNotMatch(html, /version-pill/)
+  assert.match(html, /September 8, 2026/)
 })
 
 test('the export beside the page matches exportMarkdown', async () => {
