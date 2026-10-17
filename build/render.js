@@ -1,26 +1,17 @@
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkDirective from 'remark-directive'
+import remarkGfm from 'remark-gfm'
 import remarkRehype from 'remark-rehype'
 import rehypeSlug from 'rehype-slug'
 import rehypeStringify from 'rehype-stringify'
 import { visit } from 'unist-util-visit'
 import { toString } from 'mdast-util-to-string'
-import { remarkDirectivesToHtml, remarkInlineDirectivesAsText } from './directives.js'
+import { remarkDirectivesToHtml, remarkInlineDirectivesAsText, remarkHtmlAsText } from './directives.js'
 
 export function withBase(base, url) {
   if (typeof url === 'string' && url.startsWith('/') && !url.startsWith('//')) return base + url.slice(1)
   return url
-}
-
-// Raw HTML in content is shown as text: authors never write markup, so a
-// literal tag is a mistake to show, not a thing to execute or silently drop.
-function remarkHtmlAsText() {
-  return tree => {
-    visit(tree, 'html', node => {
-      node.type = 'text'
-    })
-  }
 }
 
 function rehypeCollectAndRebase({ base, headings }) {
@@ -40,6 +31,7 @@ export function renderMarkdown(markdown, { base = '/' } = {}) {
   const headings = []
   const file = unified()
     .use(remarkParse)
+    .use(remarkGfm)
     .use(remarkDirective)
     .use(remarkInlineDirectivesAsText)
     .use(remarkDirectivesToHtml)

@@ -24,6 +24,17 @@ export function remarkInlineDirectivesAsText() {
   }
 }
 
+// Raw HTML in content is shown as text: authors never write markup, so a
+// literal tag is a mistake to show, not a thing to execute or silently drop.
+// Used by both the HTML render and the markdown export so they agree.
+export function remarkHtmlAsText() {
+  return tree => {
+    visit(tree, 'html', node => {
+      node.type = 'text'
+    })
+  }
+}
+
 export function remarkDirectivesToHtml() {
   return (tree, file) => {
     visit(tree, node => {

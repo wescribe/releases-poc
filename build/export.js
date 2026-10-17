@@ -1,9 +1,10 @@
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkDirective from 'remark-directive'
+import remarkGfm from 'remark-gfm'
 import remarkStringify from 'remark-stringify'
 import { formatDate } from './content.js'
-import { remarkInlineDirectivesAsText } from './directives.js'
+import { remarkInlineDirectivesAsText, remarkHtmlAsText } from './directives.js'
 
 // Replace every directive with its children so only plain markdown remains.
 function unwrap(nodes) {
@@ -28,9 +29,17 @@ function remarkStripDirectives() {
 export function exportMarkdown(release) {
   // Parse with the directive extension, then stringify WITHOUT it: the
   // directive stringifier would otherwise escape every ":" in plain prose.
-  const parser = unified().use(remarkParse).use(remarkDirective).use(remarkInlineDirectivesAsText).use(remarkStripDirectives)
+  // GFM is on both sides so tables and strikethrough survive unescaped.
+  const parser = unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkDirective)
+    .use(remarkInlineDirectivesAsText)
+    .use(remarkHtmlAsText)
+    .use(remarkStripDirectives)
   const tree = parser.runSync(parser.parse(release.body), release.body)
   const body = unified()
+    .use(remarkGfm)
     .use(remarkStringify, { bullet: '-', emphasis: '_', strong: '*', rule: '-' })
     .stringify(tree)
   const header = [

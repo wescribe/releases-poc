@@ -59,7 +59,7 @@ hero: /images/releases/draft-pages-before-you-publish.svg   # 16:9 visual used o
 ---
 ```
 
-The build fails with a message naming the file and the field if any of the five is missing.
+The build fails with a message naming the file and the field if any of the five is missing, or if `date` is not a plain `YYYY-MM-DD` day. `version` is read as written, so `2.10` stays `2.10`.
 
 ## The stored format
 
@@ -100,7 +100,7 @@ Three rules keep content safe:
 - A `columns` container with the wrong number of children still renders and warns.
 - Only container directives are part of the format. Inline `:name` and leaf `::name` forms are restored to literal text, so a time like `12:24 PM` is never mistaken for a directive.
 
-Raw HTML in content is shown as literal text, never executed and never dropped.
+Raw HTML in content is shown as literal text in both the page and the export, never executed and never dropped. GitHub-flavored markdown extensions (tables, strikethrough, task lists) are supported in both.
 
 ## Export rules
 
@@ -112,7 +112,7 @@ Each page is exported to `releases/<slug>/<slug>.md`, linked from the page as "V
 4. A `callout` becomes its inner markdown, with the attribute dropped.
 5. Everything else passes through as written.
 
-The export contains no fence lines, no attributes and no HTML.
+The export contains no fence lines, no attributes and no HTML. Image paths inside content are left as written, so a root-relative path such as `/images/...` is relative to the site root, not to the exported file. Consumers hosted under a subpath should resolve them against the site's base URL.
 
 ## Format options considered
 
@@ -210,12 +210,12 @@ test/                   node --test suites
 
 A GitHub Actions workflow runs on every push to `main`: install, test, build with `BASE_PATH=/releases-poc/`, and deploy `dist/` to GitHub Pages. `dist/` is never committed. The repository's Pages source must be set to GitHub Actions.
 
-Every link and asset URL in the templates is prefixed by the base path, and root-relative paths inside content such as `/images/...` are rewritten at build time, so the same content works at the domain root in development and under the repository subpath in production.
+Every link and asset URL in the templates is prefixed by the base path, and root-relative paths inside content such as `/images/...` are rewritten in the HTML at build time, so the same content works at the domain root in development and under the repository subpath in production. The markdown export is not rewritten; see Export rules.
 
 ## Adding a release
 
 1. Save the original notes as `content/source/vX.Y.Z.txt`.
 2. Create `content/releases/<slug>.md` with the five front matter fields and the body, using the directives above.
 3. Generate a hero: `node scripts/make-placeholder.js <slug> content/images/releases/<slug>.svg`. In-page images take `--ratio 4:3 --label "..."`.
-4. Add the version and slug pair to `test/content-integrity.test.js`, which checks that every item in the source survives into the export.
+4. Add the version and slug pair to `test/content-integrity.test.js`. It checks that every item lead-in in the source (the text before the first ` - ` on a line) survives into the export, that the render has no warnings, and that every referenced image exists. It does not compare item bodies, so read the page against the source once by eye.
 5. `npm test`, then `npm run dev` and look.

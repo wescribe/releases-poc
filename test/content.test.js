@@ -38,3 +38,15 @@ test('loadIndex returns title and intro', async () => {
   assert.equal(index.title, 'Spokenote release notes')
   assert.equal(index.intro.trim(), 'What changed and why it matters.')
 })
+
+test('version keeps its trailing zero even though YAML would read 2.10 as a number', async () => {
+  const [r] = await loadReleases(tempDirWith('version-2-10.md'))
+  assert.equal(r.version, '2.10')
+})
+
+test('a date that is not a plain YYYY-MM-DD day is rejected with the file and field', async () => {
+  for (const f of ['date-with-time.md', 'date-words.md']) {
+    await assert.rejects(loadReleases(tempDirWith(f)), err =>
+      err instanceof ContentError && err.file.endsWith(f) && err.field === 'date' && /YYYY-MM-DD/.test(err.message))
+  }
+})

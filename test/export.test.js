@@ -41,3 +41,17 @@ test('inline colon text such as times of day survives the export', () => {
   const out = exportMarkdown({ ...release, body: 'Created at 12:24 PM, see :tip.' })
   assert.match(out, /12:24 PM, see :tip\./)
 })
+
+test('GFM tables and strikethrough pass through the export unescaped', () => {
+  const out = exportMarkdown({ ...release, body: '| A | B |\n|---|---|\n| 1 | 2 |\n\n~~old~~ and - [ ] task' })
+  assert.match(out, /\| A +\| B +\|/)
+  assert.match(out, /~~old~~/)
+  assert.doesNotMatch(out, /\\~/)
+})
+
+test('raw HTML in content does not appear as HTML in the export', () => {
+  const out = exportMarkdown({ ...release, body: 'Line with <b>bold</b>.\n\n<div class="x">block</div>' })
+  assert.doesNotMatch(out, /(^|[^\\])<[a-z/]/m)
+  assert.match(out, /bold/)
+  assert.match(out, /block/)
+})

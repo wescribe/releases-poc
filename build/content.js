@@ -5,17 +5,39 @@ import matter from 'gray-matter'
 const REQUIRED = ['title', 'summary', 'date', 'version', 'hero']
 
 export class ContentError extends Error {
-  constructor(file, field) {
-    super(`${file}: missing required front matter field "${field}"`)
+  constructor(file, field, reason = `missing required front matter field "${field}"`) {
+    super(`${file}: ${reason}`)
     this.name = 'ContentError'
     this.file = file
     this.field = field
   }
 }
 
-function normalizeDate(value) {
-  if (value instanceof Date) return value.toISOString().slice(0, 10)
-  return String(value)
+const DAY = /^\d{4}-\d{2}-\d{2}$/
+
+// YAML reads "2026-09-29" as a Date at UTC midnight. Anything else (a time,
+// a time zone, or words) is a mistake we refuse rather than shift silently.
+function normalizeDate(value, file) {
+  let day
+  if (value instanceof Date) {
+    if (value.getUTCHours() || value.getUTCMinutes() || value.getUTCSeconds()) {
+      throw new ContentError(file, 'date', `front matter "date" must be a plain day in YYYY-MM-DD form, not a time`)
+    }
+    day = value.toISOString().slice(0, 10)
+  } else {
+    day = String(value).trim()
+  }
+  if (!DAY.test(day) || Number.isNaN(Date.parse(`${day}T00:00:00Z`))) {
+    throw new ContentError(file, 'date', `front matter "date" must be a plain day in YYYY-MM-DD form`)
+  }
+  return day
+}
+
+// YAML reads "version: 2.10" as the number 2.1. Take the text as written.
+function rawVersion(raw, parsed) {
+  const match = raw.match(/^version:[ \t]*(.+?)[ \t]*$/m)
+  const text = match ? match[1].replace(/^["']|["']$/g, '') : String(parsed)
+  return text
 }
 
 async function readRelease(file) {
@@ -30,8 +52,8 @@ async function readRelease(file) {
     slug: path.basename(file, '.md'),
     title: String(data.title),
     summary: String(data.summary),
-    date: normalizeDate(data.date),
-    version: String(data.version),
+    date: normalizeDate(data.date, file),
+    version: rawVersion(raw, data.version),
     hero: String(data.hero),
     body: content,
   }

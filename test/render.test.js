@@ -55,3 +55,9 @@ test('inline colon text such as times of day is literal text, not a directive', 
   assert.match(html, /12:24 PM, see :tip and ::leaf/)
   assert.deepEqual(warnings, [])
 })
+
+test('GFM tables and strikethrough render', () => {
+  const { html } = renderMarkdown('| A | B |\n|---|---|\n| 1 | 2 |\n\n~~old~~', base)
+  assert.match(html, /<table>/)
+  assert.match(html, /<del>old<\/del>/)
+})
