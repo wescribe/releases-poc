@@ -29,7 +29,7 @@ const exists = p => fs.existsSync(path.join(out, p))
 before(async () => {
   content = contentDirWith('alpha.md', 'beta.md', 'gamma.md')
   out = fs.mkdtempSync(path.join(os.tmpdir(), 'poc-dist-'))
-  await buildSite({ contentDir: content, outDir: out, base: '/poc/' })
+  await buildSite({ contentDir: content, outDir: out, base: '/poc/', siteUrl: 'https://example.test' })
   out1 = fs.mkdtempSync(path.join(os.tmpdir(), 'poc-dist1-'))
   await buildSite({ contentDir: contentDirWith('alpha.md'), outDir: out1, base: '/' })
 })
@@ -97,6 +97,32 @@ test('a release without a version shows no version pill', async () => {
   const html = fs.readFileSync(path.join(o, 'releases/no-version/index.html'), 'utf8')
   assert.doesNotMatch(html, /version-pill/)
   assert.match(html, /September 8, 2026/)
+})
+
+test('release pages carry Open Graph and Twitter tags with the cover as the large image', () => {
+  const html = read('releases/alpha/index.html')
+  const head = html.split('</head>')[0]
+  assert.match(head, /<meta property="og:type" content="article">/)
+  assert.match(head, /<meta property="og:title" content="Alpha headline">/)
+  assert.match(head, /<meta property="og:description" content="Alpha summary\.">/)
+  assert.match(head, /<meta property="og:url" content="https:\/\/example\.test\/poc\/releases\/alpha\/">/)
+  assert.match(head, /<meta property="og:image" content="https:\/\/example\.test\/poc\/images\/releases\/alpha\.svg">/)
+  assert.match(head, /<meta property="og:site_name" content="Spokenote release notes">/)
+  assert.match(head, /<meta property="article:published_time" content="2026-09-29">/)
+  assert.match(head, /<meta name="twitter:card" content="summary_large_image">/)
+  assert.match(head, /<meta name="twitter:title" content="Alpha headline">/)
+  assert.match(head, /<meta name="twitter:image" content="https:\/\/example\.test\/poc\/images\/releases\/alpha\.svg">/)
+  assert.match(head, /<link rel="canonical" href="https:\/\/example\.test\/poc\/releases\/alpha\/">/)
+})
+
+test('the index carries Open Graph and Twitter tags using the newest cover', () => {
+  const head = read('index.html').split('</head>')[0]
+  assert.match(head, /<meta property="og:type" content="website">/)
+  assert.match(head, /<meta property="og:title" content="Spokenote release notes">/)
+  assert.match(head, /<meta property="og:url" content="https:\/\/example\.test\/poc\/">/)
+  assert.match(head, /<meta property="og:image" content="https:\/\/example\.test\/poc\/images\/releases\/alpha\.svg">/)
+  assert.match(head, /<meta name="twitter:card" content="summary_large_image">/)
+  assert.doesNotMatch(head, /article:published_time/)
 })
 
 test('robots.txt at the output root blocks every .md file', () => {

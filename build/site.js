@@ -18,8 +18,9 @@ async function write(file, text, pages) {
   pages.push(file)
 }
 
-export async function buildSite({ contentDir, outDir, base = '/' }) {
+export async function buildSite({ contentDir, outDir, base = '/', siteUrl = 'http://localhost:4173' }) {
   if (!base.endsWith('/')) base += '/'
+  siteUrl = siteUrl.replace(/\/$/, '')
   const index = await loadIndex(path.join(contentDir, 'index.md'))
   const releases = await loadReleases(path.join(contentDir, 'releases'))
 
@@ -36,11 +37,11 @@ export async function buildSite({ contentDir, outDir, base = '/' }) {
     warnings.push(...w.map(msg => `${release.slug}: ${msg}`))
     const related = releases.filter(r => r.slug !== release.slug)
     const dir = path.join(outDir, 'releases', release.slug)
-    await write(path.join(dir, 'index.html'), releasePage({ release, html, headings, related, base }), pages)
+    await write(path.join(dir, 'index.html'), releasePage({ release, html, headings, related, base, siteUrl }), pages)
     await write(path.join(dir, `${release.slug}.md`), exportMarkdown(release), pages)
   }
 
-  await write(path.join(outDir, 'index.html'), indexPage({ index, releases, base }), pages)
+  await write(path.join(outDir, 'index.html'), indexPage({ index, releases, base, siteUrl }), pages)
 
   // Keep the markdown exports out of search results. Crawlers only read
   // robots.txt at the host root, so on a subpath host this file is advisory

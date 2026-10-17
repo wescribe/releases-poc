@@ -7,6 +7,7 @@ const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')
 const dist = path.join(root, 'dist')
 const port = Number(process.env.PORT ?? 4173)
 const base = process.env.BASE_PATH ?? '/'
+const siteUrl = process.env.SITE_URL ?? 'http://localhost:4173'
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -20,7 +21,7 @@ const TYPES = {
 
 async function build() {
   try {
-    const { pages, warnings } = await buildSite({ contentDir: path.join(root, 'content'), outDir: dist, base })
+    const { pages, warnings } = await buildSite({ contentDir: path.join(root, 'content'), outDir: dist, base, siteUrl })
     for (const w of warnings) console.error(`warning: ${w}`)
     console.log(`[${new Date().toLocaleTimeString()}] built ${pages.length} files`)
   } catch (err) {

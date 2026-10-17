@@ -18,10 +18,10 @@ npm test           # node --test
 npm run build      # writes dist/
 ```
 
-Set `BASE_PATH` when the site will not be served from the domain root. GitHub Pages serves this repository from `/releases-poc/`:
+Set `BASE_PATH` when the site will not be served from the domain root, and `SITE_URL` to the scheme and host so Open Graph and canonical URLs are absolute. GitHub Pages serves this repository from `/releases-poc/`:
 
 ```bash
-BASE_PATH=/releases-poc/ npm run build
+BASE_PATH=/releases-poc/ SITE_URL=https://wescribe.github.io npm run build
 ```
 
 ## What the POC proves
