@@ -3,7 +3,7 @@ title: Chat support, a knowledge base link, and integration health at a glance
 summary: Reach support and the knowledge base from your profile menu, and see and fix integration connections yourself.
 date: 2026-07-14
 version: 2.17.0
-hero: /images/releases/chat-support-and-integration-health.svg
+hero: /images/releases/support-chat-knowledge-base.png
 ---
 :::::columns
 ::::column

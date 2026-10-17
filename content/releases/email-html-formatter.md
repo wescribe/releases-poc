@@ -2,7 +2,7 @@
 title: Put each recipient's Spokenote video in your email campaigns
 summary: The new Email HTML Formatter generates the HTML that embeds a personal video thumbnail for every recipient, formatted for your email platform. Pick a platform, point it at your Spokenote URL field, and copy the code.
 date: 2026-09-08
-hero: /images/releases/email-html-formatter.svg
+hero: /images/releases/email-html-tool.png
 ---
 :::callout{type=note}
 **Placeholder draft.** These notes were written from the public tool page and will be replaced with the real release notes.

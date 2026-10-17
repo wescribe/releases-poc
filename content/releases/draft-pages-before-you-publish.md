@@ -3,7 +3,7 @@ title: Draft pages before you publish
 summary: Work on a page or a whole campaign privately, publish when you're ready, and edit live pages without disturbing what visitors see.
 date: 2026-09-29
 version: 2.19.0
-hero: /images/releases/draft-pages-before-you-publish.svg
+hero: /images/releases/save-draft-publish.png
 ---
 :::::columns
 ::::column
