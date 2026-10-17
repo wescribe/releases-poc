@@ -94,3 +94,18 @@ test('content values are HTML-escaped in templates', async () => {
   const html = fs.readFileSync(path.join(o, 'releases/alpha/index.html'), 'utf8')
   assert.match(html, /# or &amp; &lt;b&gt;bold&lt;\/b&gt;/)
 })
+
+test('stylesheet defines the accent token, dark theme and the 900px breakpoint', () => {
+  const css = read('assets/styles.css')
+  assert.match(css, /--accent:/)
+  assert.match(css, /\[data-theme="dark"\]/)
+  assert.match(css, /prefers-color-scheme: dark/)
+  assert.match(css, /@media \(max-width: 900px\)/)
+})
+
+test('theme script toggles data-theme, persists to localStorage and runs a scroll-spy', () => {
+  const js = read('assets/theme.js')
+  assert.match(js, /localStorage/)
+  assert.match(js, /data-theme/)
+  assert.match(js, /IntersectionObserver/)
+})

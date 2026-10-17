@@ -85,7 +85,7 @@ ${related.map(r => releaseCard({ release: r, base })).join('\n')}
       <p class="eyebrow">${escapeHtml(formatDate(release.date))}</p>
       <h1 class="headline">${escapeHtml(release.title)}</h1>
       <p class="lead">${escapeHtml(release.summary)}</p>
-      <p class="version">Version ${escapeHtml(release.version)} · <a class="export-link" href="${exportUrl}">View as markdown</a></p>
+      <p class="version"><span>Version ${escapeHtml(release.version)}</span><a class="export-link" href="${exportUrl}">View as markdown</a></p>
     </header>
     <div class="content">
 ${html}
@@ -103,7 +103,7 @@ export function indexPage({ index, introHtml, releases, base }) {
     ? `<article class="hero-card">
   <a class="hero-card-image-link" href="${releaseUrl(base, newest)}"><img class="hero-card-image" src="${escapeHtml(withBase(base, newest.hero))}" alt=""></a>
   <div class="hero-card-body">
-    <p class="eyebrow">Latest · ${escapeHtml(formatMonth(newest.date))}</p>
+    <p class="eyebrow">Latest release, ${escapeHtml(formatMonth(newest.date))}</p>
     <h2 class="hero-card-title"><a href="${releaseUrl(base, newest)}">${escapeHtml(newest.title)}</a></h2>
     <p class="hero-card-summary">${escapeHtml(newest.summary)}</p>
     <a class="read-more" href="${releaseUrl(base, newest)}">Read the release</a>
