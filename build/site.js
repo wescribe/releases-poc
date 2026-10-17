@@ -34,7 +34,7 @@ export async function buildSite({ contentDir, outDir, base = '/' }) {
   for (const release of releases) {
     const { html, headings, warnings: w } = renderMarkdown(release.body, { base })
     warnings.push(...w.map(msg => `${release.slug}: ${msg}`))
-    const related = releases.filter(r => r.slug !== release.slug).slice(0, 2)
+    const related = releases.filter(r => r.slug !== release.slug)
     const dir = path.join(outDir, 'releases', release.slug)
     await write(path.join(dir, 'index.html'), releasePage({ release, html, headings, related, base }), pages)
     await write(path.join(dir, `${release.slug}.md`), exportMarkdown(release), pages)

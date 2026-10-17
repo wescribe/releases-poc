@@ -50,17 +50,24 @@ test("release page order: hero, date, headline, summary, version, sections, what
     last = i
   }
   assert.match(html, /<title>Alpha headline · Spokenote release notes<\/title>/)
-  assert.match(html, /href="\/poc\/releases\/alpha\/alpha\.md"[^>]*>View as markdown/)
-  assert.match(html, /href="#first"/)
+  assert.match(html, /<aside class="rail">[\s\S]*href="#first"[\s\S]*<a class="export-link" href="\/poc\/releases\/alpha\/alpha\.md" target="_blank" rel="noopener">View as markdown<\/a>[\s\S]*<\/aside>/)
+  assert.doesNotMatch(html.split('<aside')[0], /View as markdown/)
+  const rail = html.match(/<aside class="rail">[\s\S]*<\/aside>/)[0]
+  assert.match(rail, /<button class="share-toggle"[^>]*aria-expanded="false"[^>]*>Share this page<\/button>/)
+  assert.match(rail, /<ul class="share-menu"[^>]*hidden[^>]*data-message="Alpha headline: Alpha summary\."[^>]*>/)
+  for (const n of ['facebook', 'x', 'linkedin', 'whatsapp', 'telegram', 'email', 'sms']) assert.match(rail, new RegExp(`data-share="${n}"`))
+  assert.match(html, /<p class="version"><span class="version-pill">Version 2\.19\.0<\/span><\/p>/)
   assert.match(html, /href="\/poc\/assets\/styles\.css"/)
   assert.match(html, /<a class="wordmark" href="\/poc\/" aria-label="Spokenote release notes">\s*<svg[^>]*class="logo"/)
 })
 
-test("what's new shows the two most recent other releases and links to the index", () => {
+test("what's new is a carousel of every other release, newest first, with hidden prev and next buttons", () => {
   const html = read('releases/gamma/index.html')
   const section = html.split("What's new")[1]
-  assert.match(section, /releases\/alpha\//)
-  assert.match(section, /releases\/beta\//)
+  assert.match(section, /class="carousel"/)
+  assert.match(section, /<button class="carousel-btn carousel-prev"[^>]*aria-label="Previous releases"[^>]*hidden/)
+  assert.match(section, /<button class="carousel-btn carousel-next"[^>]*aria-label="Next releases"[^>]*hidden/)
+  assert.ok(section.indexOf('releases/alpha/') < section.indexOf('releases/beta/'))
   assert.doesNotMatch(section, /releases\/gamma\//)
   assert.match(section, /href="\/poc\/"[^>]*>All releases/)
 })
