@@ -1,7 +1,7 @@
 # WeScribe Release Notes POC: Design
 
 Date: 2026-10-17
-Status: draft, awaiting approval
+Status: approved 2026-10-17 (product owner said "start implementing")
 
 ## Intent
 
