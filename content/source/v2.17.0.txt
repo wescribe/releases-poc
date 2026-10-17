@@ -1,0 +1,21 @@
+v2.17.0 Production Release Notes
+----------
+7/14/26
+These changes are live in production. This will be the last release until we have features related to the Bud Light deal ready to deploy.
+
+
+Access Page - The Edit Bar is now hidden until after the video has finished uploading. 
+Workspace Users List - This table is now sorted by "Status" with the Owner being listed first: Active > Invited > Removed
+Support
+Chat Support - Under the profile dropdown, "Help" has been renamed to "Chat Support". 
+Knowledge Base - A separate link has been added under the profile dropdown that links directly to the Knowledge Base in a new browser tab. 
+
+Campaigns created by integrations - 
+Imported contacts with empty values for a metafield are now skipped as expected instead of forcing a Manual Clip to be created.
+The default Spokenote campaign name will now include the date and time to differentiate it from other campaigns created using the same segment of contacts. (eg: Leads - 2026-07-09 12:24 PM)
+
+Integration Settings - The "health" status on the Integration setting will now reflect the real time status more accurately as well as give the user the ability to Disconnect or Reconnect the integration connection on their own. 
+Bug fixes:
+Analytics tracking in preview mode - The ?preview query parameter is now stopping analytics tracking as expected. 
+Video Thumbnails - Video thumbnails are now displaying correctly (CDN URL vs. blob)
+User with no workspaces - If a user is authenticated, but they are not a member of any workspace, they will now be given the option to create a personal workspace or logout. Previously, there was a bug where the user would be stuck in an infinite loop.

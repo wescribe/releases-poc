@@ -41,7 +41,7 @@ Things that would make this a failure even if it technically works:
 
 - Static output served by GitHub Pages. No server at request time.
 - Repository: https://github.com/wescribe/releases-poc, working folder /Users/peterlockhart/projects/wescribe-releases-poc. The repository exists, the first commit is pushed, and the product owner has admin rights. The product owner is making the repository public so GitHub Pages is available on the organization's free plan. The site will live at `https://wescribe.github.io/releases-poc/`.
-- Content is for Spokenote, the first customer-style example. The v2.19.0 release (deployed 2026-09-29) was supplied as plain text by the product owner and is committed verbatim at `content/source/v2.19.0.txt`. That file is the source of truth. The builder may add a customer-facing headline and summary, tighten wording for a customer audience, and arrange the text into sections, but must not drop or invent items. The v2.18.0 release (deployed 2026-09-01) is committed the same way at `content/source/v2.18.0.txt`. The third release will be supplied by the product owner the same way. If they are not available when the build reaches content, the builder uses clearly labelled placeholder releases that are easy to replace.
+- Content is for Spokenote, the first customer-style example. The v2.19.0 release (deployed 2026-09-29) was supplied as plain text by the product owner and is committed verbatim at `content/source/v2.19.0.txt`. That file is the source of truth. The builder may add a customer-facing headline and summary, tighten wording for a customer audience, and arrange the text into sections, but must not drop or invent items. The v2.18.0 release (deployed 2026-09-01) is committed the same way at `content/source/v2.18.0.txt`. The v2.17.0 release (deployed 2026-07-14) is at `content/source/v2.17.0.txt`. All three source files are now in the repo, so no placeholder releases are needed. Note that v2.17.0 is much shorter than the other two; its page will have fewer sections, and that is fine.
 - No personal data anywhere in content or placeholders.
 - Everything a visitor sees must work on a phone.
 
@@ -201,5 +201,4 @@ These were not discussed and can be changed without reopening the design:
 ## Open items
 
 - The repository must be switched to public before the first deploy, and the repository's Pages source set to GitHub Actions. The builder checks both before running the deploy step.
-- Content for the third release, to come from the product owner.
 - A real brand color and wordmark for Spokenote, if the team wants the POC to carry them.
