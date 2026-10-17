@@ -99,6 +99,12 @@ test('a release without a version shows no version pill', async () => {
   assert.match(html, /September 8, 2026/)
 })
 
+test('robots.txt at the output root blocks every .md file', () => {
+  const robots = read('robots.txt')
+  assert.match(robots, /^User-agent: \*$/m)
+  assert.match(robots, /^Disallow: \/\*\.md\$$/m)
+})
+
 test('the export beside the page matches exportMarkdown', async () => {
   const alpha = (await loadReleases(path.join(content, 'releases'))).find(r => r.slug === 'alpha')
   assert.equal(read('releases/alpha/alpha.md'), exportMarkdown(alpha))

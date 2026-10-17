@@ -42,5 +42,10 @@ export async function buildSite({ contentDir, outDir, base = '/' }) {
 
   await write(path.join(outDir, 'index.html'), indexPage({ index, releases, base }), pages)
 
+  // Keep the markdown exports out of search results. Crawlers only read
+  // robots.txt at the host root, so on a subpath host this file is advisory
+  // unless it is also served from the root.
+  await write(path.join(outDir, 'robots.txt'), 'User-agent: *\nDisallow: /*.md$\n', pages)
+
   return { pages, warnings }
 }
