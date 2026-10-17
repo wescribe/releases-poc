@@ -589,6 +589,6 @@ git push
 
 ## Self-review notes
 
-- Spec coverage: content model and directives (Task 2), export (Task 3), pages and frame (Task 4), responsive and theming (Task 7), placeholders (Task 5), content (Task 6), build and dev (Task 4), deploy and base path (Task 8), documents (Task 9), IDEAS.md already exists. The two older releases the product owner has not yet supplied are out of this plan; adding them is a repeat of Task 6 steps 3 to 8 for one file each.
+- Spec coverage: content model and directives (Task 2), export (Task 3), pages and frame (Task 4), responsive and theming (Task 7), placeholders (Task 5), content (Task 6), build and dev (Task 4), deploy and base path (Task 8), documents (Task 9), IDEAS.md already exists. All three supplied releases are in Task 6. Adding a future release is a repeat of Task 6 steps 3 to 8 for one file.
 - Names used across tasks: `loadReleases`, `loadIndex`, `formatDate`, `formatMonth`, `ContentError`, `renderMarkdown`, `remarkDirectivesToHtml`, `exportMarkdown`, `buildSite`, `layout`, `releasePage`, `indexPage`, `releaseCard`, `escapeHtml`, `placeholderSvg`. Class names listed once in Task 7.
 - Review Focus items 1 and 2 are tested in Task 1, 3 in Tasks 2 and 3, 4 in Task 2, 5 in Task 4.
