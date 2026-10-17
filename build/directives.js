@@ -1,12 +1,27 @@
 import { visit } from 'unist-util-visit'
 
 const CALLOUT_TYPES = new Set(['note', 'tip', 'warning'])
-const DIRECTIVE_TYPES = ['containerDirective', 'leafDirective', 'textDirective']
+const DIRECTIVE_TYPES = ['containerDirective']
 
 function setHtml(node, className) {
   node.data ??= {}
   node.data.hName = 'div'
   node.data.hProperties = { className }
+}
+
+// Only container directives (:::name) are part of the format. Inline ":name"
+// and leaf "::name" forms are restored to the literal text the author wrote,
+// so times like "12:24 PM" or a stray colon never turn into a directive.
+export function remarkInlineDirectivesAsText() {
+  return (tree, file) => {
+    const source = String(file.value ?? file)
+    visit(tree, ['textDirective', 'leafDirective'], (node, index, parent) => {
+      const { start, end } = node.position ?? {}
+      const literal = start && end ? source.slice(start.offset, end.offset) : `:${node.name}`
+      const text = { type: 'text', value: literal }
+      parent.children[index] = node.type === 'leafDirective' ? { type: 'paragraph', children: [text] } : text
+    })
+  }
 }
 
 export function remarkDirectivesToHtml() {

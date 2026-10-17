@@ -49,3 +49,9 @@ test('absolute paths are prefixed with the base path', () => {
 test('special characters are escaped', () => {
   assert.match(renderMarkdown('Values like # or & and <b>', base).html, /# or &#x26; and &#x3C;b>/)
 })
+
+test('inline colon text such as times of day is literal text, not a directive', () => {
+  const { html, warnings } = renderMarkdown('Created at 12:24 PM, see :tip and ::leaf', base)
+  assert.match(html, /12:24 PM, see :tip and ::leaf/)
+  assert.deepEqual(warnings, [])
+})

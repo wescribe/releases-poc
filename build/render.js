@@ -6,7 +6,7 @@ import rehypeSlug from 'rehype-slug'
 import rehypeStringify from 'rehype-stringify'
 import { visit } from 'unist-util-visit'
 import { toString } from 'mdast-util-to-string'
-import { remarkDirectivesToHtml } from './directives.js'
+import { remarkDirectivesToHtml, remarkInlineDirectivesAsText } from './directives.js'
 
 export function withBase(base, url) {
   if (typeof url === 'string' && url.startsWith('/') && !url.startsWith('//')) return base + url.slice(1)
@@ -41,6 +41,7 @@ export function renderMarkdown(markdown, { base = '/' } = {}) {
   const file = unified()
     .use(remarkParse)
     .use(remarkDirective)
+    .use(remarkInlineDirectivesAsText)
     .use(remarkDirectivesToHtml)
     .use(remarkHtmlAsText)
     .use(remarkRehype)

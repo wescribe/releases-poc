@@ -3,15 +3,14 @@ import remarkParse from 'remark-parse'
 import remarkDirective from 'remark-directive'
 import remarkStringify from 'remark-stringify'
 import { formatDate } from './content.js'
+import { remarkInlineDirectivesAsText } from './directives.js'
 
 // Replace every directive with its children so only plain markdown remains.
 function unwrap(nodes) {
   const out = []
   for (const node of nodes) {
-    if (node.type === 'containerDirective' || node.type === 'textDirective') {
+    if (node.type === 'containerDirective') {
       out.push(...unwrap(node.children ?? []))
-    } else if (node.type === 'leafDirective') {
-      continue
     } else {
       if (Array.isArray(node.children)) node.children = unwrap(node.children)
       out.push(node)
@@ -27,12 +26,13 @@ function remarkStripDirectives() {
 }
 
 export function exportMarkdown(release) {
+  // Parse with the directive extension, then stringify WITHOUT it: the
+  // directive stringifier would otherwise escape every ":" in plain prose.
+  const parser = unified().use(remarkParse).use(remarkDirective).use(remarkInlineDirectivesAsText).use(remarkStripDirectives)
+  const tree = parser.runSync(parser.parse(release.body), release.body)
   const body = unified()
-    .use(remarkParse)
-    .use(remarkDirective)
-    .use(remarkStripDirectives)
     .use(remarkStringify, { bullet: '-', emphasis: '_', strong: '*', rule: '-' })
-    .processSync(release.body)
+    .stringify(tree)
   const header = [
     `# ${release.title}`,
     '',

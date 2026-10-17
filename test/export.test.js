@@ -36,3 +36,8 @@ test('export preserves special characters and contains no HTML', () => {
 test('the hero image is not in the export', () => {
   assert.doesNotMatch(exportMarkdown({ ...release, body: 'Body.' }), /a\.svg/)
 })
+
+test('inline colon text such as times of day survives the export', () => {
+  const out = exportMarkdown({ ...release, body: 'Created at 12:24 PM, see :tip.' })
+  assert.match(out, /12:24 PM, see :tip\./)
+})
