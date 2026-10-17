@@ -53,7 +53,7 @@ test("release page order: hero, date, headline, summary, version, sections, what
   assert.match(html, /href="\/poc\/releases\/alpha\/alpha\.md"[^>]*>View as markdown/)
   assert.match(html, /href="#first"/)
   assert.match(html, /href="\/poc\/assets\/styles\.css"/)
-  assert.match(html, /<a[^>]*href="\/poc\/"[^>]*>[^<]*Spokenote/)
+  assert.match(html, /<a class="wordmark" href="\/poc\/" aria-label="Spokenote release notes">\s*<svg[^>]*class="logo"/)
 })
 
 test("what's new shows the two most recent other releases and links to the index", () => {
@@ -65,9 +65,10 @@ test("what's new shows the two most recent other releases and links to the index
   assert.match(section, /href="\/poc\/"[^>]*>All releases/)
 })
 
-test('index has intro, a hero card for the newest and a grid of the rest, newest first', () => {
+test('index has no intro heading, a hero card for the newest and a grid of the rest, newest first', () => {
   const html = read('index.html')
-  assert.match(html, /why it matters/)
+  assert.doesNotMatch(html, /class="intro"/)
+  assert.doesNotMatch(html.split('<main>')[1], /why it matters/)
   assert.ok(html.indexOf('class="hero-card"') < html.indexOf('class="card-grid"'))
   assert.ok(html.indexOf('releases/alpha/') < html.indexOf('releases/beta/'))
   assert.ok(html.indexOf('releases/beta/') < html.indexOf('releases/gamma/'))

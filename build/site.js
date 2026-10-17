@@ -40,9 +40,7 @@ export async function buildSite({ contentDir, outDir, base = '/' }) {
     await write(path.join(dir, `${release.slug}.md`), exportMarkdown(release), pages)
   }
 
-  const intro = renderMarkdown(index.intro, { base })
-  warnings.push(...intro.warnings.map(msg => `index: ${msg}`))
-  await write(path.join(outDir, 'index.html'), indexPage({ index, introHtml: intro.html, releases, base }), pages)
+  await write(path.join(outDir, 'index.html'), indexPage({ index, releases, base }), pages)
 
   return { pages, warnings }
 }

@@ -2,9 +2,14 @@
    Tokens first, then frame, release page, index, responsive. */
 
 :root {
-  --accent: #16a34a;          /* placeholder brand color, swap once */
-  --accent-ink: #15803d;
-  --accent-soft: #e6f6ec;
+  --accent: #0094ce;          /* Spokenote blue */
+  --logo: #005677;            /* Spokenote wordmark fill */
+  --button: var(--accent);    /* primary button background */
+  --button-ink: #ffffff;
+  --badge-bg: rgba(255, 255, 255, 0.92);
+  --badge-ink: #15201b;
+  --accent-ink: #007bb0;      /* same blue, darkened for text on light */
+  --accent-soft: #e6f4fb;
   --bg: #ffffff;
   --surface: #f5f8f6;
   --text: #15201b;
@@ -12,7 +17,7 @@
   --border: #e1e7e4;
   --border-strong: #c9d3ce;
   --note-bg: #f5f8f6;  --note-edge: #8a9a92;
-  --tip-bg: #e9f8ee;   --tip-edge: #16a34a;
+  --tip-bg: #e9f5fb;   --tip-edge: #0094ce;
   --warn-bg: #fdf4e3;  --warn-edge: #d98c1f;
   --radius-lg: 14px;
   --radius: 10px;
@@ -24,9 +29,12 @@
 }
 
 :root[data-theme="dark"] {
-  --accent: #4ade80;
-  --accent-ink: #86efac;
-  --accent-soft: #15301f;
+  --logo: #ffffff;
+  --badge-bg: rgba(14, 20, 17, 0.85);
+  --badge-ink: #e7eee9;
+  --accent: #5cc0ee;
+  --accent-ink: #7fd0f5;
+  --accent-soft: #10303f;
   --bg: #0e1411;
   --surface: #151d18;
   --text: #e7eee9;
@@ -34,16 +42,19 @@
   --border: #243029;
   --border-strong: #35453c;
   --note-bg: #151d18;  --note-edge: #6f7f77;
-  --tip-bg: #13281b;   --tip-edge: #4ade80;
+  --tip-bg: #0f2a38;   --tip-edge: #5cc0ee;
   --warn-bg: #2b2112;  --warn-edge: #f0b35a;
   color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --accent: #4ade80;
-    --accent-ink: #86efac;
-    --accent-soft: #15301f;
+    --logo: #ffffff;
+    --badge-bg: rgba(14, 20, 17, 0.85);
+    --badge-ink: #e7eee9;
+    --accent: #5cc0ee;
+    --accent-ink: #7fd0f5;
+    --accent-soft: #10303f;
     --bg: #0e1411;
     --surface: #151d18;
     --text: #e7eee9;
@@ -51,7 +62,7 @@
     --border: #243029;
     --border-strong: #35453c;
     --note-bg: #151d18;  --note-edge: #6f7f77;
-    --tip-bg: #13281b;   --tip-edge: #4ade80;
+    --tip-bg: #0f2a38;   --tip-edge: #5cc0ee;
     --warn-bg: #2b2112;  --warn-edge: #f0b35a;
     color-scheme: dark;
   }
@@ -102,7 +113,8 @@ th { color: var(--muted); font-weight: 600; }
   backdrop-filter: saturate(140%) blur(10px);
   border-bottom: 1px solid var(--border);
 }
-.wordmark { color: var(--text); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; display: flex; align-items: baseline; gap: 10px; }
+.wordmark { color: var(--logo); display: flex; align-items: center; gap: 12px; }
+.logo { height: 22px; width: auto; display: block; }
 .wordmark:hover { text-decoration: none; }
 .wordmark-sub { color: var(--muted); font-weight: 500; font-size: 14px; }
 .theme-toggle {
@@ -188,7 +200,7 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 .rail li { margin: 0; }
 .rail a { display: block; color: var(--muted); padding: 5px 0 5px 14px; margin-left: -1px; border-left: 1px solid transparent; line-height: 1.4; }
 .rail a:hover { color: var(--text); text-decoration: none; }
-.rail a.active { color: var(--accent-ink); border-left-color: var(--accent); }
+.rail a.active { color: var(--button); border-left-color: var(--button); }
 
 /* What's new row */
 .whats-new { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
@@ -205,10 +217,10 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 .card-body .eyebrow { margin-bottom: 6px; font-size: 13px; }
 .card-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
 .card-title a { color: var(--text); }
-.card-summary { color: var(--muted); font-size: 15px; margin: 0; }
+.card-summary { color: var(--muted); font-size: 15px; margin: 0 0 12px; }
+.card-link { display: inline-block; color: var(--button); font-weight: 600; font-size: 15px; }
 
 /* Index */
-.intro { margin-bottom: 40px; }
 .hero-card {
   display: grid;
   grid-template-columns: 1.25fr 1fr;
@@ -220,12 +232,27 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
   background: var(--surface);
 }
 .hero-card:hover { border-color: var(--border-strong); }
+.hero-card-image-link { position: relative; display: block; }
 .hero-card-image { width: 100%; height: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.hero-card-badge {
+  position: absolute; left: 16px; bottom: 16px;
+  padding: 5px 11px; border-radius: 999px;
+  background: var(--badge-bg); color: var(--badge-ink);
+  font-size: 13px; font-weight: 600; line-height: 1.2; letter-spacing: 0.01em;
+  backdrop-filter: blur(6px);
+}
 .hero-card-body { padding: 28px 32px; display: flex; flex-direction: column; justify-content: center; }
 .hero-card-title { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; }
 .hero-card-title a { color: var(--text); }
 .hero-card-summary { color: var(--muted); font-size: 17px; margin-bottom: 18px; }
-.read-more { font-weight: 600; }
+.read-more {
+  display: inline-block; align-self: flex-start;
+  padding: 10px 20px; border-radius: 999px;
+  background: var(--button); color: var(--button-ink);
+  font-weight: 600; font-size: 15px; line-height: 1.2;
+}
+.read-more:hover { text-decoration: none; filter: brightness(1.08); }
+.read-more:focus-visible { outline-color: var(--button); }
 .empty { color: var(--muted); }
 
 /* Responsive: columns stack, rail hides, grids go single */
@@ -239,6 +266,12 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
   .lead { font-size: 18px; }
   .hero-card-body { padding: 20px; }
   .hero-card-title { font-size: 24px; }
+  /* Stacked cards read like the hero card: same type sizes once they are full width. */
+  .card-body { padding: 20px; }
+  .card-body .eyebrow { font-size: 14px; }
+  .card-title { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .card-summary { font-size: 17px; }
+  .card-link { font-size: 15px; }
   .release-head { margin: 24px 0 32px; }
   .content > * + h2, .content > * + .columns, .columns > .column > * + h2 { margin-top: 36px; }
 }

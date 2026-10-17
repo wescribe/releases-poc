@@ -194,7 +194,7 @@ build/
   index.js        npm run build
   dev.js          npm run dev: build, watch, serve
 content/
-  index.md        index page title and intro
+  index.md        index page title and meta description (no visible intro)
   releases/*.md   one file per release; file name is the slug
   images/         committed SVG placeholders
   source/*.txt    the original plain-text release notes, the source of truth for content
