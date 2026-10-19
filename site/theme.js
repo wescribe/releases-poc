@@ -29,6 +29,24 @@
     })
   }
 
+  // On narrow screens the rail is hidden, so its action buttons move into the
+  // release header as a horizontal row. The same nodes move back when the
+  // viewport widens, so their event listeners stay attached.
+  var railActions = document.querySelector('.rail .rail-actions')
+  var railHost = railActions && railActions.parentNode
+  var headerHost = document.querySelector('.release-head')
+  var narrow = window.matchMedia ? window.matchMedia('(max-width: 900px)') : null
+  function placeActions() {
+    if (!railActions || !headerHost || !narrow) return
+    var target = narrow.matches ? headerHost : railHost
+    if (railActions.parentNode !== target) target.appendChild(railActions)
+  }
+  if (narrow) {
+    placeActions()
+    if (narrow.addEventListener) narrow.addEventListener('change', placeActions)
+    else if (narrow.addListener) narrow.addListener(placeActions)
+  }
+
   // Share menu: builds each network's share URL from the page URL plus a
   // generated message, where the network accepts one.
   var share = document.querySelector('.share')
@@ -93,7 +111,27 @@
     showVote(readVote())
   }
 
-  var exportLink = document.querySelector('.rail .export-link')
+  // "More actions" menu: open the markdown export in an AI assistant.
+  var actions = document.querySelector('.actions')
+  if (actions) {
+    var actionsToggle = actions.querySelector('.actions-toggle')
+    var actionsMenu = actions.querySelector('.actions-menu')
+    function setActionsOpen(open) {
+      actionsMenu.hidden = !open
+      actionsToggle.setAttribute('aria-expanded', open ? 'true' : 'false')
+    }
+    actionsToggle.addEventListener('click', function () { setActionsOpen(actionsMenu.hidden) })
+    document.addEventListener('click', function (e) { if (!actions.contains(e.target)) setActionsOpen(false) })
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setActionsOpen(false) })
+    actionsMenu.addEventListener('click', function (e) {
+      var item = e.target.closest('a[data-action]')
+      if (!item) return
+      track('open_in_ai', { assistant: item.getAttribute('data-action') })
+      setActionsOpen(false)
+    })
+  }
+
+  var exportLink = document.querySelector('.rail-actions .export-link')
   if (exportLink) exportLink.addEventListener('click', function () { track('view_markdown') })
 
   // "What's new" carousel: two cards per view on desktop, one on narrow screens.

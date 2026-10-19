@@ -53,7 +53,7 @@ test("release page order: hero, date, headline, summary, version, sections, what
   assert.match(html, /<aside class="rail">[\s\S]*href="#first"[\s\S]*<a class="export-link" href="\/poc\/releases\/alpha\/alpha\.md" target="_blank" rel="noopener">View as markdown<\/a>[\s\S]*<\/aside>/)
   assert.doesNotMatch(html.split('<aside')[0], /View as markdown/)
   const rail = html.match(/<aside class="rail">[\s\S]*<\/aside>/)[0]
-  assert.match(rail, /<button class="share-toggle"[^>]*aria-expanded="false"[^>]*>Share this page<\/button>/)
+  assert.match(rail, /<button class="share-toggle"[^>]*aria-expanded="false"[^>]*>Share this page <svg/)
   assert.ok(rail.indexOf('Share this page') < rail.indexOf('View as markdown'), 'share comes before export')
   assert.match(rail, /<ul class="share-menu"[^>]*hidden[^>]*data-message="Alpha headline: Alpha summary\."[^>]*>/)
   for (const n of ['facebook', 'x', 'linkedin', 'whatsapp', 'telegram', 'email', 'sms']) assert.match(rail, new RegExp(`data-share="${n}"[^>]*><span class="share-icon"><svg`))
@@ -173,6 +173,30 @@ test('the site script sends and remembers feedback votes', () => {
   const js = read('assets/theme.js')
   assert.match(js, /track\('page_feedback'/)
   assert.match(js, /feedback:/)
+})
+
+test('the rail offers Open in Claude and Open in ChatGPT pointing at the markdown export', () => {
+  const rail = read('releases/alpha/index.html').match(/<aside class="rail">[\s\S]*<\/aside>/)[0]
+  assert.match(rail, /<button class="actions-toggle"[^>]*aria-expanded="false"[^>]*>More actions/)
+  const md = encodeURIComponent('Read https://example.test/poc/releases/alpha/alpha.md so I can ask questions about it.')
+  assert.match(rail, new RegExp(`<a class="actions-item" href="https://claude\\.ai/new\\?q=${md.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]*target="_blank"[^>]*>[\\s\\S]*?Open in Claude`))
+  assert.match(rail, new RegExp(`<a class="actions-item" href="https://chatgpt\\.com/\\?hint=search&amp;q=${md.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]*target="_blank"[^>]*>[\\s\\S]*?Open in ChatGPT`))
+  assert.equal((rail.match(/Ask questions about this page/g) || []).length, 2)
+})
+
+test('robots.txt lets the Claude and ChatGPT fetchers read the markdown exports', () => {
+  const robots = read('robots.txt')
+  assert.match(robots, /^User-agent: Claude-User\nAllow: \/$/m)
+  assert.match(robots, /^User-agent: ChatGPT-User\nAllow: \/$/m)
+})
+
+test('on narrow screens the rail actions move into the release header as a row', () => {
+  const js = read('assets/theme.js')
+  assert.match(js, /matchMedia\('\(max-width: 900px\)'\)/)
+  assert.match(js, /\.release-head/)
+  assert.match(js, /\.rail-actions/)
+  const css = read('assets/styles.css')
+  assert.match(css, /\.release-head \.rail-actions \{[^}]*flex-direction: row/)
 })
 
 test('robots.txt at the output root blocks every .md file', () => {

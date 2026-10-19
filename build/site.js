@@ -45,10 +45,16 @@ export async function buildSite({ contentDir, outDir, base = '/', siteUrl = 'htt
 
   await write(path.join(outDir, 'index.html'), indexPage({ index, releases, base, siteUrl, gaId }), pages)
 
-  // Keep the markdown exports out of search results. Crawlers only read
-  // robots.txt at the host root, so on a subpath host this file is advisory
-  // unless it is also served from the root.
-  await write(path.join(outDir, 'robots.txt'), 'User-agent: *\nDisallow: /*.md$\n', pages)
+  // Keep the markdown exports out of search results, but let the user-driven
+  // AI fetchers read them so "Open in Claude / ChatGPT" works. Crawlers only
+  // read robots.txt at the host root, so on a subpath host this file is
+  // advisory unless it is also served from the root.
+  const robots = [
+    'User-agent: Claude-User', 'Allow: /', '',
+    'User-agent: ChatGPT-User', 'Allow: /', '',
+    'User-agent: *', 'Disallow: /*.md$', '',
+  ].join('\n')
+  await write(path.join(outDir, 'robots.txt'), robots, pages)
 
   return { pages, warnings }
 }

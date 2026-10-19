@@ -112,7 +112,9 @@ Each page is exported to `releases/<slug>/<slug>.md`, linked from the page as "V
 4. A `callout` becomes its inner markdown, with the attribute dropped.
 5. Everything else passes through as written.
 
-The export contains no fence lines, no attributes and no HTML. Image paths inside content are left as written, so a root-relative path such as `/images/...` is relative to the site root, not to the exported file. Consumers hosted under a subpath should resolve them against the site's base URL.
+The export contains no fence lines, no attributes and no HTML.
+
+The rail's "More actions" menu offers "Open in Claude" and "Open in ChatGPT". Each opens the assistant with a prompt asking it to read the page's export URL, so the assistant works from the clean markdown rather than the styled page. `robots.txt` disallows `.md` files for search crawlers but explicitly allows the `Claude-User` and `ChatGPT-User` fetchers, which act on a person's request. Image paths inside content are left as written, so a root-relative path such as `/images/...` is relative to the site root, not to the exported file. Consumers hosted under a subpath should resolve them against the site's base URL.
 
 ## Format options considered
 
@@ -220,6 +222,7 @@ With the Google Analytics tag loaded, `site/theme.js` sends these custom events.
 | `carousel_nav` | A What's new arrow is clicked | `direction` (previous, next) |
 | `theme_toggle` | The light/dark button is clicked | `theme` (the mode switched to) |
 | `page_feedback` | Yes or No is clicked on "Did this page help you?" | `helpful` (yes, no); `changed_from` when a visitor switches an earlier vote |
+| `open_in_ai` | An option under "More actions" is chosen | `assistant` (claude, chatgpt) |
 
 Feedback votes are also kept in the visitor's localStorage under `feedback:<release>`, so a page remembers the answer and does not ask again on that browser. Nothing is shown to visitors in aggregate; the counts live only in Google Analytics.
 
