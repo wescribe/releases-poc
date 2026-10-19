@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Drag a block to reorder">
+<defs><linearGradient id="g" gradientTransform="rotate(319 0.5 0.5)"><stop offset="0" stop-color="#dcfce7"/><stop offset="1" stop-color="#fef9c3"/></linearGradient></defs>
+<rect width="1200" height="900" fill="url(#g)"/>
+<circle cx="165" cy="622" r="278" fill="#fde68a" opacity="0.52"/>
+<circle cx="910" cy="842" r="351" fill="#fde68a" opacity="0.35"/>
+<rect x="519" y="786.5" width="456" height="147" rx="37" fill="#fde68a" opacity="0.53"/>
+<rect x="258" y="-133.5" width="712" height="339" rx="85" fill="#fde68a" opacity="0.35"/>
+<text x="60" y="828" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="41" font-weight="600" fill="#0f172a" opacity="0.7">Drag a block to reorder</text>
+</svg>
