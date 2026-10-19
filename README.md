@@ -18,7 +18,7 @@ npm test           # node --test
 npm run build      # writes dist/
 ```
 
-Set `BASE_PATH` when the site will not be served from the domain root, and `SITE_URL` to the scheme and host so Open Graph and canonical URLs are absolute. GitHub Pages serves this repository from `/releases-poc/`:
+Set `BASE_PATH` when the site will not be served from the domain root, and `SITE_URL` to the scheme and host so Open Graph and canonical URLs are absolute. `npm run build` includes the Google Analytics tag by default; set `GA_ID` to use a different measurement id, or to an empty string to leave it out. The dev server leaves analytics out unless `GA_ID` is set. GitHub Pages serves this repository from `/releases-poc/`:
 
 ```bash
 BASE_PATH=/releases-poc/ SITE_URL=https://wescribe.github.io npm run build

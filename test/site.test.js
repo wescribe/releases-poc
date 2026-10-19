@@ -29,7 +29,7 @@ const exists = p => fs.existsSync(path.join(out, p))
 before(async () => {
   content = contentDirWith('alpha.md', 'beta.md', 'gamma.md')
   out = fs.mkdtempSync(path.join(os.tmpdir(), 'poc-dist-'))
-  await buildSite({ contentDir: content, outDir: out, base: '/poc/', siteUrl: 'https://example.test' })
+  await buildSite({ contentDir: content, outDir: out, base: '/poc/', siteUrl: 'https://example.test', gaId: 'G-TEST123' })
   out1 = fs.mkdtempSync(path.join(os.tmpdir(), 'poc-dist1-'))
   await buildSite({ contentDir: contentDirWith('alpha.md'), outDir: out1, base: '/' })
 })
@@ -123,6 +123,18 @@ test('the index carries Open Graph and Twitter tags using the newest cover', () 
   assert.match(head, /<meta property="og:image" content="https:\/\/example\.test\/poc\/images\/releases\/alpha\.svg">/)
   assert.match(head, /<meta name="twitter:card" content="summary_large_image">/)
   assert.doesNotMatch(head, /article:published_time/)
+})
+
+test('every page loads the Google Analytics tag when a measurement id is configured', () => {
+  for (const p of ['index.html', 'releases/alpha/index.html', 'releases/gamma/index.html']) {
+    const head = read(p).split('</head>')[0]
+    assert.match(head, /<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-TEST123"><\/script>/, p)
+    assert.match(head, /gtag\('config', 'G-TEST123'\)/, p)
+  }
+})
+
+test('pages built without a measurement id carry no analytics tag', () => {
+  assert.doesNotMatch(read1('index.html'), /googletagmanager/)
 })
 
 test('robots.txt at the output root blocks every .md file', () => {
