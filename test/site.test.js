@@ -137,6 +137,17 @@ test('pages built without a measurement id carry no analytics tag', () => {
   assert.doesNotMatch(read1('index.html'), /googletagmanager/)
 })
 
+test('the site script reports the custom analytics events', () => {
+  const js = read('assets/theme.js')
+  for (const name of ['toc_click', 'share', 'view_markdown', 'carousel_nav', 'theme_toggle']) assert.match(js, new RegExp(`track\\('${name}'`), name)
+  assert.match(js, /typeof window\.gtag === 'function'/)
+})
+
+test('release pages name their release on the body for analytics', () => {
+  assert.match(read('releases/alpha/index.html'), /<body data-release="alpha">/)
+  assert.match(read('index.html'), /<body data-release="index">/)
+})
+
 test('robots.txt at the output root blocks every .md file', () => {
   const robots = read('robots.txt')
   assert.match(robots, /^User-agent: \*$/m)

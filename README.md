@@ -206,6 +206,18 @@ test/                   node --test suites
 .github/workflows/deploy.yml
 ```
 
+## Analytics events
+
+With the Google Analytics tag loaded, `site/theme.js` sends these custom events. Every event carries a `release` parameter: the release slug, or `index` on the index page.
+
+| Event | When | Parameters |
+|---|---|---|
+| `toc_click` | A link in "On this page" is clicked | `section` (heading text), `section_id` |
+| `share` | A share option is chosen | `method` (facebook, x, linkedin, whatsapp, telegram, email, sms), `content_type` = release |
+| `view_markdown` | "View as markdown" is clicked | |
+| `carousel_nav` | A What's new arrow is clicked | `direction` (previous, next) |
+| `theme_toggle` | The light/dark button is clicked | `theme` (the mode switched to) |
+
 ## Deployment
 
 A GitHub Actions workflow runs on every push to `main`: install, test, build with `BASE_PATH=/releases-poc/`, and deploy `dist/` to GitHub Pages. `dist/` is never committed. The repository's Pages source must be set to GitHub Actions.

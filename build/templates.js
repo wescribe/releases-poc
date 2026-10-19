@@ -67,7 +67,7 @@ function analyticsTag(gaId) {
 `
 }
 
-export function layout({ title, base, body, description = '', social = null, gaId = null }) {
+export function layout({ title, base, body, description = '', social = null, gaId = null, pageId = 'index' }) {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -77,7 +77,7 @@ ${analyticsTag(gaId)}<title>${escapeHtml(title)}</title>
 ${description ? `<meta name="description" content="${escapeHtml(description)}">\n` : ''}${social ? socialMeta(social) + '\n' : ''}<link rel="stylesheet" href="${base}assets/styles.css">
 <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}</script>
 </head>
-<body>
+<body data-release="${escapeHtml(pageId)}">
 <header class="topbar">
   <a class="wordmark" href="${base}" aria-label="Spokenote release notes">
     ${LOGO}
@@ -182,6 +182,7 @@ ${whatsNew}`
     body,
     description: release.summary,
     gaId,
+    pageId: release.slug,
     social: {
       title: release.title,
       description: release.summary,

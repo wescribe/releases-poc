@@ -8,4 +8,4 @@
 - [x] Use the post cover image as the og:image tag and the twitter card large image
 - [ ] Add favicon
 - [x] Add Google Analytics embed
-- [ ] Add custom GA event tracking (to be defined)
+- [x] Add custom GA event tracking (to be defined)

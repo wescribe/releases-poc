@@ -1,6 +1,16 @@
 // Theme toggle and "On this page" scroll-spy. No dependencies.
 (function () {
   var root = document.documentElement
+  var release = document.body.getAttribute('data-release') || 'index'
+
+  // Custom Google Analytics events. No-op when the tag is not loaded (dev server).
+  function track(name, params) {
+    if (typeof window.gtag === 'function') {
+      params = params || {}
+      params.release = release
+      window.gtag('event', name, params)
+    }
+  }
   var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null
 
   function current() {
@@ -15,6 +25,7 @@
       var next = current() === 'dark' ? 'light' : 'dark'
       root.setAttribute('data-theme', next)
       try { localStorage.setItem('theme', next) } catch (e) { /* storage unavailable, choice lasts for this page only */ }
+      track('theme_toggle', { theme: next })
     })
   }
 
@@ -49,17 +60,25 @@
     shareToggle.addEventListener('click', function () { setOpen(shareMenu.hidden) })
     document.addEventListener('click', function (e) { if (!share.contains(e.target)) setOpen(false) })
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setOpen(false); shareToggle.focus() } })
-    shareMenu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false) })
+    shareMenu.addEventListener('click', function (e) {
+      var item = e.target.closest('a[data-share]')
+      if (!item) return
+      track('share', { method: item.getAttribute('data-share'), content_type: 'release' })
+      setOpen(false)
+    })
   }
+
+  var exportLink = document.querySelector('.rail .export-link')
+  if (exportLink) exportLink.addEventListener('click', function () { track('view_markdown') })
 
   // "What's new" carousel: two cards per view on desktop, one on narrow screens.
   // Moves one card per click, never loops, hides a button when it cannot act.
   Array.prototype.forEach.call(document.querySelectorAll('.carousel'), function (carousel) {
-    var track = carousel.querySelector('.carousel-track')
+    var strip = carousel.querySelector('.carousel-track')
     var prev = carousel.querySelector('.carousel-prev')
     var next = carousel.querySelector('.carousel-next')
-    if (!track || !prev || !next) return
-    var cards = Array.prototype.slice.call(track.children)
+    if (!strip || !prev || !next) return
+    var cards = Array.prototype.slice.call(strip.children)
     var index = 0
 
     function perView() {
@@ -69,18 +88,18 @@
     function maxIndex() { return Math.max(0, cards.length - perView()) }
     function step() {
       if (!cards.length) return 0
-      var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0
+      var gap = parseFloat(getComputedStyle(strip).columnGap || getComputedStyle(strip).gap) || 0
       return cards[0].getBoundingClientRect().width + gap
     }
     function render() {
       if (index > maxIndex()) index = maxIndex()
-      track.style.transform = 'translateX(' + (-index * step()) + 'px)'
+      strip.style.transform = 'translateX(' + (-index * step()) + 'px)'
       prev.hidden = index <= 0
       next.hidden = index >= maxIndex()
     }
 
-    prev.addEventListener('click', function () { if (index > 0) { index -= 1; render() } })
-    next.addEventListener('click', function () { if (index < maxIndex()) { index += 1; render() } })
+    prev.addEventListener('click', function () { if (index > 0) { index -= 1; render(); track('carousel_nav', { direction: 'previous' }) } })
+    next.addEventListener('click', function () { if (index < maxIndex()) { index += 1; render(); track('carousel_nav', { direction: 'next' }) } })
     window.addEventListener('resize', render)
     render()
   })
@@ -90,7 +109,11 @@
   if (!links.length || !headings.length || !('IntersectionObserver' in window)) return
 
   var byId = {}
-  links.forEach(function (a) { byId[decodeURIComponent(a.getAttribute('href').slice(1))] = a })
+  links.forEach(function (a) {
+    var id = decodeURIComponent(a.getAttribute('href').slice(1))
+    byId[id] = a
+    a.addEventListener('click', function () { track('toc_click', { section: a.textContent.trim(), section_id: id }) })
+  })
   var visible = {}
 
   function update() {
