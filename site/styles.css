@@ -196,6 +196,27 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 .directive-unknown { outline: 2px dashed #dc2626; outline-offset: 4px; margin: 16px 0; }
 .directive-unknown::before { content: "Unknown block type"; display: block; color: #dc2626; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 
+/* Feedback prompt at the end of the content column */
+.feedback {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px;
+  margin-top: 48px; padding: 14px 20px;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--bg);
+}
+.feedback-question { margin: 0; color: var(--muted); font-size: 17px; }
+.feedback-actions { display: flex; gap: 6px; margin-left: auto; }
+.feedback-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 12px; border-radius: 8px; border: 1px solid transparent; background: none;
+  color: var(--text); font: inherit; font-size: 16px; font-weight: 500; cursor: pointer;
+}
+.feedback-btn svg { color: var(--muted); }
+.feedback-btn:hover { background: var(--surface); }
+.feedback-btn:hover svg { color: var(--text); }
+.feedback-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.feedback-btn[aria-pressed="true"] svg { color: var(--accent); }
+.feedback-thanks { margin: 0; flex-basis: 100%; color: var(--muted); font-size: 14px; }
+.feedback-thanks[hidden] { display: none; }
+
 /* Rail */
 .rail { position: sticky; top: 80px; font-size: 14px; }
 .rail-title { color: var(--text); font-weight: 600; margin: 0 0 10px; font-size: 14px; }
@@ -304,6 +325,8 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
   .page { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .rail { display: none; }
   .columns-2, .columns-3, .card-grid, .hero-card { grid-template-columns: minmax(0, 1fr); }
+  .feedback { gap: 10px; padding: 14px 16px; }
+  .feedback-actions { margin-left: 0; }
   .carousel { --per-view: 1; }
   /* One card fills the carousel width, so its 16:9 cover is 100cqw * 9/16 tall.
      Center the arrows on that cover rather than on the whole card. */

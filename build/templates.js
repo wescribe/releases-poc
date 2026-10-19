@@ -44,6 +44,9 @@ const SHARE_ICONS = {
   sms: outline('<path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/>'),
 }
 
+const THUMB_UP = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h3zm0 0 4.2-7.5a2 2 0 0 1 3.6 1.4L14.2 9H19a2 2 0 0 1 2 2.3l-1.1 7A2 2 0 0 1 18 20H7"/></svg>'
+const THUMB_DOWN = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 13V4h3a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-3zm0 0-4.2 7.5a2 2 0 0 1-3.6-1.4L9.8 15H5a2 2 0 0 1-2-2.3l1.1-7A2 2 0 0 1 6 4h11"/></svg>'
+
 const CHEVRON_LEFT = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'
 const CHEVRON_RIGHT = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>'
 
@@ -174,6 +177,14 @@ ${release.version ? `      <p class="version"><span class="version-pill">Version
     </header>
     <div class="content">
 ${html}
+    </div>
+    <div class="feedback" data-feedback>
+      <p class="feedback-question">Did this page help you?</p>
+      <div class="feedback-actions">
+        <button class="feedback-btn" type="button" data-vote="yes" aria-pressed="false">${THUMB_UP}<span>Yes</span></button>
+        <button class="feedback-btn" type="button" data-vote="no" aria-pressed="false">${THUMB_DOWN}<span>No</span></button>
+      </div>
+      <p class="feedback-thanks" hidden>Thanks for your feedback.</p>
     </div>
   </article>
 ${rail}

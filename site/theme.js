@@ -68,6 +68,31 @@
     })
   }
 
+  // "Did this page help you?": one vote per release per browser, remembered in
+  // localStorage; each vote (and any change of mind) goes to analytics.
+  var feedback = document.querySelector('[data-feedback]')
+  if (feedback) {
+    var key = 'feedback:' + release
+    var buttons = Array.prototype.slice.call(feedback.querySelectorAll('.feedback-btn'))
+    var thanks = feedback.querySelector('.feedback-thanks')
+    function readVote() { try { return localStorage.getItem(key) } catch (e) { return null } }
+    function showVote(vote) {
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-vote') === vote ? 'true' : 'false') })
+      thanks.hidden = !vote
+    }
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var vote = b.getAttribute('data-vote')
+        var previous = readVote()
+        if (previous === vote) return
+        try { localStorage.setItem(key, vote) } catch (e) { /* vote still counts for this visit */ }
+        showVote(vote)
+        track('page_feedback', previous ? { helpful: vote, changed_from: previous } : { helpful: vote })
+      })
+    })
+    showVote(readVote())
+  }
+
   var exportLink = document.querySelector('.rail .export-link')
   if (exportLink) exportLink.addEventListener('click', function () { track('view_markdown') })
 

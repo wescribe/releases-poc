@@ -219,6 +219,9 @@ With the Google Analytics tag loaded, `site/theme.js` sends these custom events.
 | `view_markdown` | "View as markdown" is clicked | |
 | `carousel_nav` | A What's new arrow is clicked | `direction` (previous, next) |
 | `theme_toggle` | The light/dark button is clicked | `theme` (the mode switched to) |
+| `page_feedback` | Yes or No is clicked on "Did this page help you?" | `helpful` (yes, no); `changed_from` when a visitor switches an earlier vote |
+
+Feedback votes are also kept in the visitor's localStorage under `feedback:<release>`, so a page remembers the answer and does not ask again on that browser. Nothing is shown to visitors in aggregate; the counts live only in Google Analytics.
 
 ## Deployment
 

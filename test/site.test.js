@@ -157,6 +157,24 @@ test('every page links the favicon set and the favicon files are copied', () => 
   for (const f of ['favicon.ico', 'apple-touch-icon.png']) assert.ok(exists(f), f)
 })
 
+test('release pages end the content column with a feedback prompt; the index has none', () => {
+  const html = read('releases/alpha/index.html')
+  const article = html.match(/<article class="release">[\s\S]*?<\/article>/)[0]
+  assert.match(article, /<div class="feedback" data-feedback>/)
+  assert.match(article, /Did this page help you\?/)
+  assert.match(article, /<button class="feedback-btn" type="button" data-vote="yes" aria-pressed="false">/)
+  assert.match(article, /<button class="feedback-btn" type="button" data-vote="no" aria-pressed="false">/)
+  assert.match(article, /<p class="feedback-thanks" hidden>/)
+  assert.ok(html.indexOf('data-feedback') < html.indexOf("What's new"), 'feedback sits above What\'s new')
+  assert.doesNotMatch(read('index.html'), /data-feedback/)
+})
+
+test('the site script sends and remembers feedback votes', () => {
+  const js = read('assets/theme.js')
+  assert.match(js, /track\('page_feedback'/)
+  assert.match(js, /feedback:/)
+})
+
 test('robots.txt at the output root blocks every .md file', () => {
   const robots = read('robots.txt')
   assert.match(robots, /^User-agent: \*$/m)
