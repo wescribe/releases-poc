@@ -74,6 +74,9 @@ export function layout({ title, base, body, description = '', social = null, gaI
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 ${analyticsTag(gaId)}<title>${escapeHtml(title)}</title>
+<link rel="icon" href="${base}favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="${base}apple-touch-icon.png">
+<meta name="theme-color" content="#005677">
 ${description ? `<meta name="description" content="${escapeHtml(description)}">\n` : ''}${social ? socialMeta(social) + '\n' : ''}<link rel="stylesheet" href="${base}assets/styles.css">
 <script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}</script>
 </head>

@@ -202,6 +202,8 @@ scripts/
   make-placeholder.js   deterministic abstract SVG generator
 site/
   styles.css, theme.js  copied to dist/assets/
+public/
+  favicon.ico, apple-touch-icon.png   copied to the dist/ root as-is (from app.spokenote.com)
 test/                   node --test suites
 .github/workflows/deploy.yml
 ```

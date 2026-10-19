@@ -148,6 +148,15 @@ test('release pages name their release on the body for analytics', () => {
   assert.match(read('index.html'), /<body data-release="index">/)
 })
 
+test('every page links the favicon set and the favicon files are copied', () => {
+  for (const p of ['index.html', 'releases/alpha/index.html']) {
+    const head = read(p).split('</head>')[0]
+    assert.match(head, /<link rel="icon" href="\/poc\/favicon\.ico" sizes="any">/, p)
+    assert.match(head, /<link rel="apple-touch-icon" href="\/poc\/apple-touch-icon\.png">/, p)
+  }
+  for (const f of ['favicon.ico', 'apple-touch-icon.png']) assert.ok(exists(f), f)
+})
+
 test('robots.txt at the output root blocks every .md file', () => {
   const robots = read('robots.txt')
   assert.match(robots, /^User-agent: \*$/m)

@@ -7,6 +7,7 @@ import { exportMarkdown } from './export.js'
 import { releasePage, indexPage } from './templates.js'
 
 const SITE_DIR = fileURLToPath(new URL('../site/', import.meta.url))
+const PUBLIC_DIR = fileURLToPath(new URL('../public/', import.meta.url))   // copied to the output root as-is
 
 async function exists(p) {
   try { await fs.access(p); return true } catch { return false }
@@ -27,6 +28,7 @@ export async function buildSite({ contentDir, outDir, base = '/', siteUrl = 'htt
   await fs.rm(outDir, { recursive: true, force: true })
   await fs.mkdir(outDir, { recursive: true })
   await fs.cp(SITE_DIR, path.join(outDir, 'assets'), { recursive: true })
+  if (await exists(PUBLIC_DIR)) await fs.cp(PUBLIC_DIR, outDir, { recursive: true })
   const imagesDir = path.join(contentDir, 'images')
   if (await exists(imagesDir)) await fs.cp(imagesDir, path.join(outDir, 'images'), { recursive: true })
 
