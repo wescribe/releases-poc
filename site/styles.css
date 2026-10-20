@@ -22,9 +22,8 @@
   --radius-lg: 14px;
   --radius: 10px;
   --radius-sm: 6px;
-  --content: 720px;
   --rail: 200px;
-  --page: 980px;
+  --page: 1280px;
   color-scheme: light;
 }
 
@@ -150,7 +149,7 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 /* Release page */
 .page {
   display: grid;
-  grid-template-columns: minmax(0, var(--content)) var(--rail);
+  grid-template-columns: minmax(0, 1fr) var(--rail);
   gap: 48px;
   align-items: start;
 }
