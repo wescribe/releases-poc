@@ -3,7 +3,7 @@ title: Page templates, new blocks, and a drag-and-drop editor
 summary: Start a page from a template, add contact cards, link lists, audio and meeting schedulers, and rearrange blocks by dragging. Media processes sooner and analytics refresh every 15 minutes.
 date: 2026-10-18
 version: 2.20.0
-hero: /images/releases/page-templates-and-drag-and-drop.svg
+hero: /images/releases/page-templates-and-drag-and-drop.png
 ---
 :::::columns
 ::::column
@@ -33,7 +33,7 @@ The page builder's add-block menu now offers:
 - **Spacer** and **Divider** for layout.
 ::::
 ::::column
-![The add-block menu with the new block types](/images/releases/page-templates-and-drag-and-drop-shot-2.svg)
+![The add-block menu with the new block types](/images/releases/content-block-types.png)
 
 :::callout{type=note}
 **Some of these are advanced block types.** If your plan does not include them, the tile tells you so.
@@ -42,15 +42,6 @@ The page builder's add-block menu now offers:
 :::::
 
 :::::columns
-::::column
-![Dragging a block to a new position in the page editor](/images/releases/page-templates-and-drag-and-drop-shot-3.svg)
-
-:::callout{type=tip}
-**Safer publishing.** Publish now refuses a video, image, or audio block that has no media, so you never ship an empty player. Links on pages open only web, phone, text, and email addresses.
-
-**Sensible limits.** A page holds up to 10 blocks and a text block holds up to 5,000 characters. The editor tells you when you reach either.
-:::
-::::
 ::::column
 ## Page editor
 
@@ -62,10 +53,17 @@ The page builder's add-block menu now offers:
 - **Clearer saving.** Tooltips explain the difference between Save Draft and Publish. Block edits now count as unsaved changes, and the editor no longer warns about unsaved changes right after you saved a draft.
 - **Picks up where you left off.** Refreshing the editor reopens the tab you were on.
 ::::
+::::column
+![Dragging a block to a new position in the page editor](/images/releases/page-templates-and-drag-and-drop-shot-3.svg)
+
+:::callout{type=tip}
+**Safer publishing.** Publish now refuses a video, image, or audio block that has no media, so you never ship an empty player. Links on pages open only web, phone, text, and email addresses.
+
+**Sensible limits.** A page holds up to 10 blocks and a text block holds up to 5,000 characters. The editor tells you when you reach either.
+:::
+::::
 :::::
 
-:::::columns
-::::column
 ## Media
 
 - **Processing starts sooner.** Videos begin processing the moment an upload finishes or a browser recording stops.
@@ -74,15 +72,12 @@ The page builder's add-block menu now offers:
 - **Better video thumbnails.** Spokenote captures 12 frames from across the whole video and uses the first as the default thumbnail.
 - **Tidier library.** Files that belong to a video, such as its generated frames, stay out of your library.
 - **Thumbnails for pages without video.** A text, image, or audio page now shows a screenshot of itself in the Pages list, on Page Overview, and in link previews.
-::::
-::::column
+
 ## Analytics
 
 - **Fresher numbers.** Session and campaign analytics refresh every 15 minutes, including the hour in progress. "Last updated" now shows the time of the most recent refresh.
 - **Campaign analytics** shows every page, and its Download CSV downloads the table you see.
 - **Page analytics** Download CSV downloads every session, not just the first screen.
-::::
-:::::
 
 ## Other improvements
 

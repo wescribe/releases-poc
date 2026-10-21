@@ -3,7 +3,7 @@ title: Run instant-win sweepstakes from a QR code
 summary: Scan, confirm your age, and find out on the spot. Sweepstakes are now available to every organization, with fairness and fraud checks built in.
 date: 2026-09-01
 version: 2.18.0
-hero: /images/releases/instant-win-sweepstakes.svg
+hero: /images/releases/instant-win-sweepstakes.png
 ---
 :::::columns
 ::::column
