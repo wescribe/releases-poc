@@ -139,6 +139,8 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
   color: var(--muted);
   font-size: 14px;
 }
+.footer-link { color: var(--muted); }
+.footer-link:hover, .footer-link:focus-visible { color: var(--accent-ink); }
 
 /* Shared text pieces */
 .eyebrow { color: var(--muted); font-size: 14px; margin: 0 0 8px; }

@@ -42,7 +42,7 @@ test('build writes every page and asset', () => {
 
 test("release page order: hero, date, headline, summary, version, sections, what's new, footer", () => {
   const html = read('releases/alpha/index.html')
-  const order = ['/poc/images/releases/alpha.svg', 'September 29, 2026', '<h1', 'Alpha summary.', 'Version 2.19.0', '<h2 id="first"', "What's new", 'Powered by WeScribe. © 2026.']
+  const order = ['/poc/images/releases/alpha.svg', 'September 29, 2026', '<h1', 'Alpha summary.', 'Version 2.19.0', '<h2 id="first"', "What's new", '<a class="footer-link" href="https://wescribe.com" target="_blank" rel="noopener">Powered by WeScribe</a>. © 2026.']
   let last = -1
   for (const s of order) {
     const i = html.indexOf(s, last + 1)

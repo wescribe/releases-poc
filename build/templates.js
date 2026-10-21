@@ -9,7 +9,7 @@ export function escapeHtml(value) {
     .replaceAll('"', '&quot;')
 }
 
-const FOOTER = 'Powered by WeScribe. © 2026.'
+const FOOTER = '<a class="footer-link" href="https://wescribe.com" target="_blank" rel="noopener">Powered by WeScribe</a>. © 2026.'
 const SITE_NAME = 'Spokenote release notes'
 
 // Open Graph, Twitter card and canonical tags. All URLs must be absolute.
