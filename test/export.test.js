@@ -68,3 +68,9 @@ test('carousel-list exports as a plain bulleted list without its images', () => 
   assert.match(out, /- \*\*Contact Card\*\* with a photo\.\n- \*\*vCard\*\* with one tap\.\n/)
   assert.doesNotMatch(out, /a\.svg|b\.svg|:::|image=/)
 })
+
+test('image-carousel exports its images as plain markdown', () => {
+  const out = exportMarkdown({ ...release, body: ':::image-carousel\n![First](/images/a.png)\n\n![Second](/images/b.png)\n:::' })
+  assert.match(out, /!\[First\]\(\/images\/a\.png\)\n\n!\[Second\]\(\/images\/b\.png\)/)
+  assert.doesNotMatch(out, /:::/)
+})

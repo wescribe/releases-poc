@@ -43,7 +43,7 @@ The body is a stack of **sections**. A section is a layout:
 Each slot holds **blocks**:
 
 - **Standard markdown blocks**, untouched: paragraphs, headings, lists, links, emphasis, images, code, blockquotes, tables, rules.
-- **Custom blocks.** The POC ships two. The **callout** is a padded, rounded box with a tinted background and a colored left border, holding ordinary markdown. The **carousel list** is a list of items beside one image: the active item is marked with a blue edge and its image shows; the page advances through the items every four seconds until the reader clicks one, which stops the auto-advance until the page is reloaded.
+- **Custom blocks.** The POC ships two. The **callout** is a padded, rounded box with a tinted background and a colored left border, holding ordinary markdown. The **image carousel** shows one of several images at a time with a dot per image below, advancing every four seconds until the reader clicks a dot. The **carousel list** is a list of items beside one image: the active item is marked with a blue edge and its image shows; the page advances through the items every four seconds until the reader clicks one, which stops the auto-advance until the page is reloaded.
 
 ### Front matter
 
@@ -94,12 +94,13 @@ The directives:
 | `column` | slot | Holds blocks. |
 | `callout` | block | Optional `{type=note}`, `{type=tip}` or `{type=warning}`. Anything else falls back to `note`. |
 | `carousel-list` | block | Holds two or more `item` children and nothing else. Items stack on the left and their images share one slot on the right; the columns stack on narrow screens. |
+| `image-carousel` | block | Holds two or more markdown images and nothing else. One shows at a time; the dots below pick one and stop the auto-advance. |
 | `item` | slot | Only inside `carousel-list`. Takes `{image=/path alt="text"}` and holds one short paragraph, which becomes the clickable list entry. |
 
 Three rules keep content safe:
 
 - An unknown directive still renders, as a `div` with a visible red outline, and the build prints a warning. A typo cannot silently drop content.
-- A `columns` container with the wrong number of children still renders and warns. So does a `carousel-list` with stray children, fewer than two items, or an item without an image.
+- A `columns` container with the wrong number of children still renders and warns. So does a `carousel-list` with stray children, fewer than two items, or an item without an image, and an `image-carousel` with non-image content or fewer than two images.
 - Only container directives are part of the format. Inline `:name` and leaf `::name` forms are restored to literal text, so a time like `12:24 PM` is never mistaken for a directive.
 
 Raw HTML in content is shown as literal text in both the page and the export, never executed and never dropped. GitHub-flavored markdown extensions (tables, strikethrough, task lists) are supported in both.
@@ -113,7 +114,8 @@ Each page is exported to `releases/<slug>/<slug>.md`, linked from the page as "V
 3. A `columns` section becomes its columns' contents in order, left to right becoming top to bottom.
 4. A `callout` becomes its inner markdown, with the attribute dropped.
 5. A `carousel-list` becomes a bulleted list of its items' text. The images are layout and are omitted.
-6. Everything else passes through as written.
+6. An `image-carousel` becomes its images in order, as ordinary markdown images.
+7. Everything else passes through as written.
 
 The export contains no fence lines, no attributes and no HTML.
 
@@ -224,6 +226,7 @@ With the Google Analytics tag loaded, `site/theme.js` sends these custom events.
 | `view_markdown` | "View as markdown" is clicked | |
 | `carousel_nav` | A What's new arrow is clicked | `direction` (previous, next) |
 | `carousel_list_select` | A carousel list item is clicked, which also stops the auto-advance | `item` (the item's text, up to 100 characters) |
+| `image_carousel_select` | An image carousel dot is clicked, which also stops the auto-advance | `index` (1-based position of the image) |
 | `theme_toggle` | The light/dark button is clicked | `theme` (the mode switched to) |
 | `page_feedback` | Yes or No is clicked on "Did this page help you?" | `helpful` (yes, no); `changed_from` when a visitor switches an earlier vote |
 | `open_in_ai` | An option under "More actions" is chosen | `assistant` (claude, chatgpt) |

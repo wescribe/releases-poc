@@ -224,6 +224,27 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 }
 @keyframes carousel-list-fade { from { opacity: 0; } to { opacity: 1; } }
 
+/* Image carousel: every image occupies the same grid cell, so the frame is as
+   tall as the tallest image and never changes height; shorter images sit
+   centered. A dot per image sits centered below. theme.js advances it. */
+.image-carousel { margin: 4px 0 16px; }
+.image-carousel-frame { display: grid; align-items: center; justify-items: center; }
+.image-carousel-image { grid-area: 1 / 1; margin: 0; }
+.image-carousel-image[hidden] { display: block; visibility: hidden; }
+.image-carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+.image-carousel-dot {
+  width: 10px; height: 10px; padding: 0; border: 0; border-radius: 999px;
+  background: var(--border-strong); cursor: pointer;
+}
+.image-carousel-dot:hover { background: var(--muted); }
+.image-carousel-dot:focus-visible { outline: 2px solid var(--button); outline-offset: 2px; }
+.image-carousel-dot[aria-pressed="true"] { background: var(--button); }
+@media (prefers-reduced-motion: no-preference) {
+  .image-carousel-image { transition: opacity 0.3s ease, visibility 0.3s; }
+  .image-carousel-image[hidden] { opacity: 0; }
+  .image-carousel-dot { transition: background-color 0.2s ease; }
+}
+
 .directive-unknown { outline: 2px dashed #dc2626; outline-offset: 4px; margin: 16px 0; }
 .directive-unknown::before { content: "Unknown block type"; display: block; color: #dc2626; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 

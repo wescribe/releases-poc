@@ -80,6 +80,28 @@ function carouselListToHtml(node, file) {
   node.children = [...others, part('ol', { className: ['carousel-list-items'] }, triggers), part('div', { className: ['carousel-list-visual'] }, images)]
 }
 
+// image-carousel: ordinary markdown images, one visible at a time, with a dot
+// per image below. theme.js advances through them and swaps on a dot click.
+function imageCarouselToHtml(node, file) {
+  const images = []
+  const others = []
+  for (const child of node.children ?? []) {
+    const inline = child.type === 'paragraph' ? child.children : []
+    const onlyImages = inline.length > 0 && inline.every(n => n.type === 'image' || (n.type === 'text' && !n.value.trim()))
+    if (onlyImages) images.push(...inline.filter(n => n.type === 'image'))
+    else others.push(child)
+  }
+  if (others.length) file.message('image-carousel should contain only images', node)
+  if (images.length < 2) file.message('image-carousel needs at least two images', node)
+  const frame = images.map((img, i) => part('img', { className: ['image-carousel-image'], dataIndex: String(i), src: img.url, alt: img.alt ?? '', hidden: i > 0 }))
+  const dots = images.map((_, i) => part('button', {
+    className: ['image-carousel-dot'], type: 'button', ariaPressed: i === 0 ? 'true' : 'false',
+    ariaLabel: `Show image ${i + 1} of ${images.length}`, dataIndex: String(i),
+  }))
+  setHtml(node, ['image-carousel'], { dataImageCarousel: true })
+  node.children = [...others, part('div', { className: ['image-carousel-frame'] }, frame), part('div', { className: ['image-carousel-dots'] }, dots)]
+}
+
 export function remarkDirectivesToHtml() {
   return (tree, file) => {
     visit(tree, node => {
@@ -107,6 +129,10 @@ export function remarkDirectivesToHtml() {
       }
       if (node.type === 'containerDirective' && name === 'carousel-list') {
         carouselListToHtml(node, file)
+        return
+      }
+      if (node.type === 'containerDirective' && name === 'image-carousel') {
+        imageCarouselToHtml(node, file)
         return
       }
       file.message(`unknown directive "${name}" rendered as a plain block`, node)

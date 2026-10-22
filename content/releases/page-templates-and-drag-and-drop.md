@@ -58,7 +58,11 @@ The page builder goes beyond video, images, and buttons to offer:
 - **Live previews in the editor panel.** Video and image blocks show the media itself.
 ::::
 ::::column
+:::image-carousel
 ![Dragging a block to a new position in the page editor](/images/releases/drag-and-drop.png)
+
+![The add-block menu with the new block types](/images/releases/content-block-types.png)
+:::
 
 :::callout{type=tip}
 **Safer publishing.** Publish now refuses a video, image, or audio block that has no media, so you never ship an empty player. Links on pages open only web, phone, text, and email addresses.

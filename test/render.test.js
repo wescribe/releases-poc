@@ -106,3 +106,22 @@ test('an item outside a carousel-list is an unknown directive', () => {
   assert.equal(warnings.length, 1)
   assert.match(html, /directive-unknown directive-item/)
 })
+
+test('image-carousel renders its images in one frame with a dot per image, first active', () => {
+  const { html, warnings } = renderMarkdown(':::image-carousel\n![First](/images/a.png)\n\n![Second](/images/b.png)\n:::', { base: '/poc/' })
+  assert.deepEqual(warnings, [])
+  assert.match(html, /<div class="image-carousel" data-image-carousel>/)
+  assert.match(html, /<div class="image-carousel-frame"><img class="image-carousel-image" data-index="0" src="\/poc\/images\/a\.png" alt="First"><img class="image-carousel-image" data-index="1" src="\/poc\/images\/b\.png" alt="Second" hidden><\/div>/)
+  assert.match(html, /<div class="image-carousel-dots"><button class="image-carousel-dot" type="button" aria-pressed="true" aria-label="Show image 1 of 2" data-index="0"><\/button><button class="image-carousel-dot" type="button" aria-pressed="false" aria-label="Show image 2 of 2" data-index="1"><\/button><\/div>/)
+  assert.doesNotMatch(html, /<p>/)
+})
+
+test('image-carousel warns on non-image content or a lone image', () => {
+  const stray = renderMarkdown(':::image-carousel\nLoose text\n\n![A](/a.png)\n\n![B](/b.png)\n:::', base)
+  assert.equal(stray.warnings.length, 1)
+  assert.match(stray.warnings[0], /only images/)
+  assert.match(stray.html, /Loose text/)
+  const lone = renderMarkdown(':::image-carousel\n![A](/a.png)\n:::', base)
+  assert.equal(lone.warnings.length, 1)
+  assert.match(lone.warnings[0], /at least two/)
+})
