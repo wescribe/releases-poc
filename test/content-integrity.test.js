@@ -9,7 +9,11 @@ import { exportMarkdown } from '../build/export.js'
 // options.omit: lead-ins deliberately left out of the public page
 // options.leadIn: regex whose first group is an item's lead-in (default: text before " - ")
 const pairs = [
-  ['v2.20.0', 'page-templates-and-drag-and-drop', '2.20.0', { leadIn: /^(.+?)\. /gm }],
+  ['v2.20.0', 'page-templates-and-drag-and-drop', '2.20.0', {
+    leadIn: /^(.+?)\. /gm,
+    // Cut or reworded on the public page on 2026-10-22.
+    omit: ["Spokenote's templates use the new blocks", "Better on phones", "Clearer saving", "Some of these are advanced block types", "Picks up where you left off", "Pages update themselves", "Text alignment", "Audio", "Shared-content campaigns are edited in one place", "The recipient's first screen shows what they can add"],
+  }],
   ['v2.19.0', 'draft-pages-before-you-publish', '2.19.0', {
     // Internal engineering notes cut from the public page on 2026-10-17.
     omit: ['Sweepstakes load test', 'Sweepstakes rate limit', 'Security hardening', 'Cleanup'],
