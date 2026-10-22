@@ -156,7 +156,12 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
   align-items: start;
 }
 .release { min-width: 0; }
-.hero { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-lg); border: 1px solid var(--border); }
+/* Cover: the frame keeps the shape; the image inside drifts down as the page
+   scrolls (theme.js sets --parallax). The gap that opens at the top of the
+   frame is always in the part already scrolled out of view. Reduced motion: no drift. */
+.hero-frame { width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid var(--border); }
+.hero { width: 100%; height: 100%; object-fit: cover; display: block; transform: translate3d(0, var(--parallax, 0px), 0); will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .hero { transform: none; } }
 .release-head { margin: 32px 0 40px; }
 .version { margin: 16px 0 0; }
 .version-pill {

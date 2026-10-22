@@ -186,7 +186,7 @@ ${related.map(r => releaseCard({ release: r, base })).join('\n')}
     : ''
   const body = `<div class="page">
   <article class="release">
-    <img class="hero" src="${escapeHtml(withBase(base, release.hero))}" alt="">
+    <div class="hero-frame" data-parallax><img class="hero" src="${escapeHtml(withBase(base, release.hero))}" alt=""></div>
     <header class="release-head">
       <p class="eyebrow">${escapeHtml(formatDate(release.date))}</p>
       <h1 class="headline">${escapeHtml(release.title)}</h1>

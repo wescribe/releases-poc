@@ -244,3 +244,8 @@ test('the React islands bundle is loaded after theme.js and carries the section 
   assert.match(js, /Copy URL to this section/)
   assert.doesNotMatch(js, /process\.env\.NODE_ENV/)
 })
+
+test('the cover image sits in a parallax frame that keeps the 16:9 shape', () => {
+  const html = read('releases/alpha/index.html')
+  assert.match(html, /<div class="hero-frame" data-parallax><img class="hero" src="\/poc\/images\/releases\/alpha\.svg" alt=""><\/div>/)
+})

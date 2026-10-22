@@ -173,6 +173,30 @@
     })
   })
 
+  // Cover parallax: as the frame scrolls up and off the page, the image inside
+  // drifts down at a fraction of the scroll, so it lags the page slightly.
+  // Scrolling back up reverses it. The gap this opens at the top of the frame
+  // is smaller than the distance the frame has scrolled, so it is never visible.
+  var hero = document.querySelector('[data-parallax] .hero')
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (hero && !reduceMotion) {
+    var frame = hero.parentNode
+    var ticking = false
+    function parallax() {
+      ticking = false
+      var height = frame.offsetHeight
+      if (!height) return
+      var scrolled = Math.min(Math.max(-frame.getBoundingClientRect().top, 0), height)
+      var shift = scrolled * 0.15
+      hero.style.setProperty('--parallax', shift.toFixed(1) + 'px')
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(parallax) }
+    }, { passive: true })
+    window.addEventListener('resize', parallax)
+    parallax()
+  }
+
   // The copy-link buttons beside headings are React islands (client/islands.jsx).
 
   // Arriving on a section link, or following one in the rail, flashes that
