@@ -125,3 +125,18 @@ test('image-carousel warns on non-image content or a lone image', () => {
   assert.equal(lone.warnings.length, 1)
   assert.match(lone.warnings[0], /at least two/)
 })
+
+test('each level-two heading gets a copy-link button and starts a section', () => {
+  const { html } = renderMarkdown('Intro.\n\n## First\n\nA.\n\n## Second\n\nB.', base)
+  assert.match(html, /^<p>Intro\.<\/p>\n<section class="section"><h2 id="first">First<button class="section-link" type="button" title="Copy URL to this section" aria-label="Copy URL to this section" data-anchor="first"><svg/)
+  assert.match(html, /<\/h2>\n<p>A\.<\/p>\n<\/section><section class="section"><h2 id="second">Second<button/)
+  assert.match(html, /<p>B\.<\/p><\/section>$/)
+  assert.equal(html.match(/<section class="section">/g).length, 2)
+})
+
+test('a columns block that holds a heading is wrapped as one section', () => {
+  const { html, headings } = renderMarkdown(':::::columns\n::::column\n## Left\n\nL.\n::::\n::::column\nR.\n::::\n:::::\n\n## Plain\n\nP.', base)
+  assert.match(html, /^<section class="section"><div class="columns columns-2">/)
+  assert.match(html, /<\/div>\n<\/section><section class="section"><h2 id="plain">/)
+  assert.deepEqual(headings.map(h => h.text), ['Left', 'Plain'])
+})

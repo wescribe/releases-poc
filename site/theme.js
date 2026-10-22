@@ -173,6 +173,49 @@
     })
   })
 
+  // Section links: copy a URL that lands on this section, confirm briefly.
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text)
+    return new Promise(function (resolve, reject) {
+      var area = document.createElement('textarea')
+      area.value = text
+      area.setAttribute('readonly', '')
+      area.style.position = 'fixed'
+      area.style.opacity = '0'
+      document.body.appendChild(area)
+      area.select()
+      var ok = false
+      try { ok = document.execCommand('copy') } catch (e) { ok = false }
+      document.body.removeChild(area)
+      ok ? resolve() : reject(new Error('copy failed'))
+    })
+  }
+  all(document, '.section-link').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.getAttribute('data-anchor')
+      copyText(location.origin + location.pathname + '#' + id).then(function () {
+        btn.setAttribute('data-copied', '')
+        setTimeout(function () { btn.removeAttribute('data-copied') }, 1500)
+        track('section_link_copy', { section_id: id })
+      }).catch(function () { /* clipboard unavailable; nothing to confirm */ })
+    })
+  })
+
+  // Arriving on a section link, or following one in the rail, flashes that
+  // section. Removing and re-adding the class restarts the animation.
+  function flashSection() {
+    var id = location.hash ? decodeURIComponent(location.hash.slice(1)) : ''
+    var heading = id && document.getElementById(id)
+    var section = heading && heading.closest('.section')
+    if (!section) return
+    section.classList.remove('is-target')
+    void section.offsetWidth
+    section.classList.add('is-target')
+    setTimeout(function () { section.classList.remove('is-target') }, 2600)
+  }
+  flashSection()
+  window.addEventListener('hashchange', flashSection)
+
   // "What's new" carousel: two cards per view on desktop, one on narrow screens.
   // Moves one card per click, never loops, hides a button when it cannot act.
   Array.prototype.forEach.call(document.querySelectorAll('.carousel'), function (carousel) {

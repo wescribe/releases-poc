@@ -222,6 +222,7 @@ With the Google Analytics tag loaded, `site/theme.js` sends these custom events.
 | Event | When | Parameters |
 |---|---|---|
 | `toc_click` | A link in "On this page" is clicked | `section` (heading text), `section_id` |
+| `section_link_copy` | The link icon beside a section heading is clicked and the URL is copied | `section_id` |
 | `share` | A share option is chosen | `method` (facebook, x, linkedin, whatsapp, telegram, email, sms), `content_type` = release |
 | `view_markdown` | "View as markdown" is clicked | |
 | `carousel_nav` | A What's new arrow is clicked | `direction` (previous, next) |

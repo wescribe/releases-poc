@@ -165,11 +165,36 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
   color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1.4;
 }
 
-.content > * + h2, .content > * + .columns, .columns > .column > * + h2 { margin-top: 44px; }
+.content > * + .section { margin-top: 40px; }
+.columns > .column > * + h2 { margin-top: 44px; }
 .content h2 { font-size: 24px; font-weight: 650; padding-top: 8px; margin-bottom: 12px; scroll-margin-top: 80px; }
 .content h3 { font-size: 18px; font-weight: 600; margin: 24px 0 6px; }
 .content img { border-radius: var(--radius); border: 1px solid var(--border); margin: 4px 0 16px; }
 .content > p:first-child, .content > ul:first-child { margin-top: 0; }
+
+/* Sections: a heading and its content. A section that the URL hash points at
+   flashes a soft background for two seconds, then fades. theme.js sets
+   is-target on load and on every hash change. */
+.section { position: relative; padding: 4px 12px; margin: 0 -12px; border-radius: var(--radius); }
+.section.is-target { animation: section-flash 2.6s ease-out; }
+@keyframes section-flash { 0%, 77% { background-color: var(--accent-soft); } 100% { background-color: transparent; } }
+
+/* Copy-link button: appears when the heading is hovered or the button is focused. */
+.section-link {
+  position: relative; display: inline-flex; vertical-align: middle; margin-left: 8px; padding: 3px;
+  border: 0; border-radius: 6px; background: none; color: var(--muted); cursor: pointer;
+  opacity: 0; transition: opacity 0.15s ease, color 0.15s ease;
+}
+.section-link svg { display: block; }
+h2:hover .section-link, .section-link:focus-visible, .section-link[data-copied] { opacity: 1; }
+.section-link:hover { color: var(--accent-ink); }
+.section-link:focus-visible { outline: 2px solid var(--button); outline-offset: 1px; }
+.section-link[data-copied]::after {
+  content: "Copied"; position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%);
+  padding: 3px 8px; border-radius: 6px; background: var(--text); color: var(--bg);
+  font-size: 12px; font-weight: 500; line-height: 1.4; white-space: nowrap; pointer-events: none;
+}
+@media (hover: none) { .section-link { opacity: 1; } }
 
 /* Sections and blocks */
 .columns { display: grid; gap: 32px; align-items: start; }
@@ -423,7 +448,8 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
   .card-summary { font-size: 17px; }
   .card-link { font-size: 15px; }
   .release-head { margin: 24px 0 32px; }
-  .content > * + h2, .content > * + .columns, .columns > .column > * + h2 { margin-top: 36px; }
+  .content > * + .section { margin-top: 32px; }
+  .columns > .column > * + h2 { margin-top: 36px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
