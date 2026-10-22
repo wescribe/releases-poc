@@ -17,29 +17,37 @@ hero: /images/releases/page-templates-and-drag-and-drop.png
 ::::
 :::::
 
-:::::columns
-::::column
 ## New block types
 
 The page builder goes beyond video, images, and buttons to offer:
 
-- **Contact Card** with a photo, name, title, and ways to get in touch.
-- **vCard** so visitors can save your contact details with one tap.
-- **Social Follow** so visitors can find and follow your social profiles, with your choice of platforms, icon style, and color.
-- **Share Page** so visitors can send your page to others on their own networks, with your choice of platforms, icon style, and color.
-- **Link List** where each row can be a link, an email, a phone call, a text message, or an address.
-- **Meeting scheduler** for Calendly and HubSpot Meetings, one of each per page.
-- **Spacer** and **Divider** for layout.
-- **Text** with headings, lists, links, bold and italics, and your choice of alignment.
+::::carousel-list
+:::item{image=/images/releases/blocks/contact-card.svg alt="Contact Card block"}
+**Contact Card** with a photo, name, title, and ways to get in touch.
+:::
+:::item{image=/images/releases/blocks/link-list.svg alt="Link List block"}
+**Link List** where each row can be a link, an email, a phone call, a text message, or an address.
+:::
+:::item{image=/images/releases/blocks/meeting-scheduler.svg alt="Meeting scheduler block"}
+**Meeting scheduler** for Calendly and HubSpot Meetings, one of each per page.
+:::
+:::item{image=/images/releases/blocks/text.svg alt="Text block"}
+**Text** with headings, lists, links, bold and italics, and your choice of alignment.
+:::
+:::item{image=/images/releases/blocks/social-follow.svg alt="Social Follow block"}
+**Social Follow** so visitors can find and follow your social profiles.
+:::
+:::item{image=/images/releases/blocks/share-page.svg alt="Share Page block"}
+**Share Page** so visitors can send your page to others on their own networks.
+:::
+:::item{image=/images/releases/blocks/spacer-divider.svg alt="Spacer and Divider blocks"}
+**Spacer** and **Divider** for layout.
+:::
 ::::
-::::column
-![The add-block menu with the new block types](/images/releases/content-block-types.png)
 
 :::callout{type=note}
 **Meeting schedulers are part of the advanced block types.** If your plan does not include them, the tile tells you so.
 :::
-::::
-:::::
 
 :::::columns
 ::::column

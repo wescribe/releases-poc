@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="vCard block">
+<defs><linearGradient id="g" gradientTransform="rotate(223 0.5 0.5)"><stop offset="0" stop-color="#e0f2fe"/><stop offset="1" stop-color="#ede9fe"/></linearGradient></defs>
+<rect width="1200" height="900" fill="url(#g)"/>
+<circle cx="501" cy="151" r="318" fill="#c4b5fd" opacity="0.46"/>
+<circle cx="866" cy="822" r="240" fill="#c4b5fd" opacity="0.28"/>
+<rect x="607" y="-83" width="882" height="566" rx="142" fill="#c4b5fd" opacity="0.29"/>
+<text x="60" y="828" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="41" font-weight="600" fill="#0f172a" opacity="0.7">vCard block</text>
+</svg>

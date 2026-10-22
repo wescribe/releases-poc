@@ -61,3 +61,10 @@ test('a release without a version has a date-only metadata line', () => {
   assert.match(out, /\nReleased September 29, 2026\n\nBody\./)
   assert.doesNotMatch(out, /Version/)
 })
+
+test('carousel-list exports as a plain bulleted list without its images', () => {
+  const body = '::::carousel-list\n:::item{image=/images/blocks/a.svg alt="Block A"}\n**Contact Card** with a photo.\n:::\n:::item{image=/images/blocks/b.svg alt="Block B"}\n**vCard** with one tap.\n:::\n::::'
+  const out = exportMarkdown({ ...release, body })
+  assert.match(out, /- \*\*Contact Card\*\* with a photo\.\n- \*\*vCard\*\* with one tap\.\n/)
+  assert.doesNotMatch(out, /a\.svg|b\.svg|:::|image=/)
+})

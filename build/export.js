@@ -4,13 +4,19 @@ import remarkDirective from 'remark-directive'
 import remarkGfm from 'remark-gfm'
 import remarkStringify from 'remark-stringify'
 import { formatDate } from './content.js'
-import { remarkInlineDirectivesAsText, remarkHtmlAsText } from './directives.js'
+import { remarkInlineDirectivesAsText, remarkHtmlAsText, isItem } from './directives.js'
 
 // Replace every directive with its children so only plain markdown remains.
+// A carousel-list becomes a bulleted list of its items; the images are layout.
 function unwrap(nodes) {
   const out = []
   for (const node of nodes) {
-    if (node.type === 'containerDirective') {
+    if (node.type === 'containerDirective' && node.name === 'carousel-list') {
+      const children = node.children ?? []
+      out.push(...unwrap(children.filter(c => !isItem(c))))
+      const items = children.filter(isItem).map(item => ({ type: 'listItem', spread: false, children: unwrap(item.children ?? []) }))
+      if (items.length) out.push({ type: 'list', ordered: false, spread: false, children: items })
+    } else if (node.type === 'containerDirective') {
       out.push(...unwrap(node.children ?? []))
     } else {
       if (Array.isArray(node.children)) node.children = unwrap(node.children)

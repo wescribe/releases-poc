@@ -61,3 +61,48 @@ test('GFM tables and strikethrough render', () => {
   assert.match(html, /<table>/)
   assert.match(html, /<del>old<\/del>/)
 })
+
+const carousel = [
+  '::::carousel-list',
+  ':::item{image=/images/blocks/a.svg alt="Block A"}',
+  '**Contact Card** with a photo.',
+  ':::',
+  ':::item{image=/images/blocks/b.svg alt="Block B"}',
+  '**vCard** with one tap.',
+  ':::',
+  '::::',
+].join('\n')
+
+test('carousel-list renders a list of triggers and a stack of images, first item active', () => {
+  const { html, warnings } = renderMarkdown(carousel, { base: '/poc/' })
+  assert.deepEqual(warnings, [])
+  assert.match(html, /<div class="carousel-list" data-carousel-list>/)
+  assert.match(html, /<ol class="carousel-list-items">/)
+  assert.equal(html.match(/<li class="carousel-list-item">/g).length, 2)
+  assert.match(html, /<button class="carousel-list-trigger" type="button" aria-pressed="true" data-index="0"><strong>Contact Card<\/strong> with a photo\.<\/button>/)
+  assert.match(html, /<button class="carousel-list-trigger" type="button" aria-pressed="false" data-index="1"><strong>vCard<\/strong> with one tap\.<\/button>/)
+  assert.match(html, /<div class="carousel-list-visual">/)
+  assert.match(html, /<img class="carousel-list-image" data-index="0" src="\/poc\/images\/blocks\/a\.svg" alt="Block A">/)
+  assert.match(html, /<img class="carousel-list-image" data-index="1" src="\/poc\/images\/blocks\/b\.svg" alt="Block B" hidden>/)
+  assert.doesNotMatch(html, /<p>/)
+})
+
+test('carousel-list warns on non-item children, a lone item, or an item without an image', () => {
+  const stray = renderMarkdown('::::carousel-list\nLoose text\n:::item{image=/a.svg alt="A"}\nA\n:::\n:::item{image=/b.svg alt="B"}\nB\n:::\n::::', base)
+  assert.equal(stray.warnings.length, 1)
+  assert.match(stray.warnings[0], /item children/)
+  assert.match(stray.html, /Loose text/)
+  const lone = renderMarkdown('::::carousel-list\n:::item{image=/a.svg alt="A"}\nA\n:::\n::::', base)
+  assert.equal(lone.warnings.length, 1)
+  assert.match(lone.warnings[0], /at least two/)
+  const noImage = renderMarkdown('::::carousel-list\n:::item\nA\n:::\n:::item{image=/b.svg alt="B"}\nB\n:::\n::::', base)
+  assert.equal(noImage.warnings.length, 1)
+  assert.match(noImage.warnings[0], /image/)
+  assert.match(noImage.html, /<img class="carousel-list-image" data-index="0" src="" alt="">/)
+})
+
+test('an item outside a carousel-list is an unknown directive', () => {
+  const { html, warnings } = renderMarkdown(':::item{image=/a.svg}\nA\n:::', base)
+  assert.equal(warnings.length, 1)
+  assert.match(html, /directive-unknown directive-item/)
+})

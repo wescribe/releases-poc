@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Link List block">
+<defs><linearGradient id="g" gradientTransform="rotate(130 0.5 0.5)"><stop offset="0" stop-color="#dcfce7"/><stop offset="1" stop-color="#fef9c3"/></linearGradient></defs>
+<rect width="1200" height="900" fill="url(#g)"/>
+<circle cx="544" cy="875" r="371" fill="#fde68a" opacity="0.55"/>
+<rect x="835" y="645" width="590" height="190" rx="48" fill="#fde68a" opacity="0.52"/>
+<circle cx="190" cy="743" r="304" fill="#fde68a" opacity="0.27"/>
+<circle cx="1163" cy="642" r="277" fill="#fde68a" opacity="0.33"/>
+<circle cx="694" cy="142" r="321" fill="#fde68a" opacity="0.57"/>
+<text x="60" y="828" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="41" font-weight="600" fill="#0f172a" opacity="0.7">Link List block</text>
+</svg>

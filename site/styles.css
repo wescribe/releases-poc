@@ -194,6 +194,36 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 .callout-tip { background: var(--tip-bg); border-left-color: var(--tip-edge); }
 .callout-warning { background: var(--warn-bg); border-left-color: var(--warn-edge); }
 
+/* Carousel list: items on the left, one image on the right. The active item
+   carries a blue edge on the shared gray line; theme.js advances it. */
+.carousel-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start; margin: 16px 0 24px; }
+.carousel-list-items { list-style: none; margin: 0; padding: 0; }
+.carousel-list-item { margin: 0; }
+.carousel-list-item + .carousel-list-item { margin-top: 5px; }
+.carousel-list-trigger {
+  position: relative; display: block; width: 100%; padding: 8px 0 8px 18px;
+  border: 0; background: none;
+  color: var(--muted); font: inherit; line-height: 1.5; text-align: left; cursor: pointer;
+}
+/* Each item has its own rounded line segment; the gap between items keeps them apart. */
+.carousel-list-trigger::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  border-radius: 999px; background: var(--border);
+}
+.carousel-list-trigger:hover { color: var(--text); }
+.carousel-list-trigger:focus-visible { outline: 2px solid var(--button); outline-offset: -2px; border-radius: 4px; }
+.carousel-list-trigger[aria-pressed="true"] { color: var(--text); }
+.carousel-list-trigger[aria-pressed="true"]::before { background: var(--button); }
+.carousel-list-visual { min-width: 0; }
+.carousel-list-visual img { margin: 0; }
+.carousel-list-image[hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .carousel-list-trigger { transition: color 0.2s ease; }
+  .carousel-list-trigger::before { transition: background-color 0.2s ease; }
+  .carousel-list-image { animation: carousel-list-fade 0.3s ease; }
+}
+@keyframes carousel-list-fade { from { opacity: 0; } to { opacity: 1; } }
+
 .directive-unknown { outline: 2px dashed #dc2626; outline-offset: 4px; margin: 16px 0; }
 .directive-unknown::before { content: "Unknown block type"; display: block; color: #dc2626; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 
@@ -348,6 +378,7 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
   .page { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .rail { display: none; }
   .columns-2, .columns-3, .card-grid, .hero-card { grid-template-columns: minmax(0, 1fr); }
+  .carousel-list { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   /* Rail actions relocated into the release header by theme.js */
   .release-head .rail-actions { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; position: relative; }
   .release-head .share, .release-head .actions { position: static; }

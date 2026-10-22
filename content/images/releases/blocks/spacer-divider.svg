@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Spacer and Divider blocks">
+<defs><linearGradient id="g" gradientTransform="rotate(21 0.5 0.5)"><stop offset="0" stop-color="#e0f2fe"/><stop offset="1" stop-color="#ede9fe"/></linearGradient></defs>
+<rect width="1200" height="900" fill="url(#g)"/>
+<rect x="556" y="508.5" width="650" height="347" rx="87" fill="#c4b5fd" opacity="0.31"/>
+<circle cx="874" cy="198" r="162" fill="#c4b5fd" opacity="0.32"/>
+<rect x="365" y="12.5" width="656" height="235" rx="59" fill="#c4b5fd" opacity="0.46"/>
+<rect x="315" y="547" width="526" height="220" rx="55" fill="#c4b5fd" opacity="0.57"/>
+<rect x="633" y="619" width="564" height="204" rx="51" fill="#c4b5fd" opacity="0.54"/>
+<text x="60" y="828" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="41" font-weight="600" fill="#0f172a" opacity="0.7">Spacer and Divider blocks</text>
+</svg>

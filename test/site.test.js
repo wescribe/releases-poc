@@ -139,7 +139,7 @@ test('pages built without a measurement id carry no analytics tag', () => {
 
 test('the site script reports the custom analytics events', () => {
   const js = read('assets/theme.js')
-  for (const name of ['toc_click', 'share', 'view_markdown', 'carousel_nav', 'theme_toggle']) assert.match(js, new RegExp(`track\\('${name}'`), name)
+  for (const name of ['toc_click', 'share', 'view_markdown', 'carousel_nav', 'carousel_list_select', 'theme_toggle']) assert.match(js, new RegExp(`track\\('${name}'`), name)
   assert.match(js, /typeof window\.gtag === 'function'/)
 })
 

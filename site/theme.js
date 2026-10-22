@@ -134,6 +134,34 @@
   var exportLink = document.querySelector('.rail-actions .export-link')
   if (exportLink) exportLink.addEventListener('click', function () { track('view_markdown') })
 
+  // Carousel list: one item active at a time, auto-advancing every few seconds
+  // and swapping the image beside it. A click selects an item and stops the
+  // auto-advance for the rest of the page view. Reduced motion: no auto-advance.
+  var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  Array.prototype.forEach.call(document.querySelectorAll('[data-carousel-list]'), function (list) {
+    var triggers = Array.prototype.slice.call(list.querySelectorAll('.carousel-list-trigger'))
+    var images = Array.prototype.slice.call(list.querySelectorAll('.carousel-list-image'))
+    if (triggers.length < 2) return
+    var active = 0
+    var timer = null
+
+    function show(index) {
+      active = index
+      triggers.forEach(function (t, i) { t.setAttribute('aria-pressed', i === index ? 'true' : 'false') })
+      images.forEach(function (img, i) { img.hidden = i !== index })
+    }
+    function stop() { if (timer) { clearInterval(timer); timer = null } }
+
+    triggers.forEach(function (t, i) {
+      t.addEventListener('click', function () {
+        stop()
+        show(i)
+        track('carousel_list_select', { item: t.textContent.trim().slice(0, 100) })
+      })
+    })
+    if (!noMotion) timer = setInterval(function () { show((active + 1) % triggers.length) }, 4000)
+  })
+
   // "What's new" carousel: two cards per view on desktop, one on narrow screens.
   // Moves one card per click, never loops, hides a button when it cannot act.
   Array.prototype.forEach.call(document.querySelectorAll('.carousel'), function (carousel) {
