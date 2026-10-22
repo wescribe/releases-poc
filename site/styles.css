@@ -179,22 +179,27 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 .section.is-target { animation: section-flash 2.6s ease-out; }
 @keyframes section-flash { 0%, 77% { background-color: var(--accent-soft); } 100% { background-color: transparent; } }
 
-/* Copy-link button: appears when the heading is hovered or the button is focused. */
+/* Copy-link button: appears when the heading is hovered, the button is focused,
+   or its tooltip is open. The tooltip itself is a Base UI island (client/islands.jsx). */
 .section-link {
-  position: relative; display: inline-flex; vertical-align: middle; margin-left: 8px; padding: 3px;
+  display: inline-flex; vertical-align: middle; margin-left: 8px; padding: 3px;
   border: 0; border-radius: 6px; background: none; color: var(--muted); cursor: pointer;
   opacity: 0; transition: opacity 0.15s ease, color 0.15s ease;
 }
 .section-link svg { display: block; }
-h2:hover .section-link, .section-link:focus-visible, .section-link[data-copied] { opacity: 1; }
+h2:hover .section-link, .section-link:focus-visible, .section-link[data-popup-open] { opacity: 1; }
 .section-link:hover { color: var(--accent-ink); }
 .section-link:focus-visible { outline: 2px solid var(--button); outline-offset: 1px; }
-.section-link[data-copied]::after {
-  content: "Copied"; position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%);
-  padding: 3px 8px; border-radius: 6px; background: var(--text); color: var(--bg);
-  font-size: 12px; font-weight: 500; line-height: 1.4; white-space: nowrap; pointer-events: none;
-}
 @media (hover: none) { .section-link { opacity: 1; } }
+
+/* Tooltips (Base UI): a small dark bubble that fades in and out. */
+.tooltip-positioner { z-index: 50; }
+.tooltip-popup {
+  padding: 4px 9px; border-radius: 6px; background: var(--text); color: var(--bg);
+  font-size: 12px; font-weight: 500; line-height: 1.4; white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+.tooltip-popup[data-starting-style], .tooltip-popup[data-ending-style] { opacity: 0; }
 
 /* Sections and blocks */
 .columns { display: grid; gap: 32px; align-items: start; }

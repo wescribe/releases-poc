@@ -37,7 +37,7 @@ function scheduleBuild() {
 }
 
 await build()
-for (const dir of ['content', 'site', 'build']) {
+for (const dir of ['content', 'site', 'client', 'build']) {
   fs.watch(path.join(root, dir), { recursive: true }, scheduleBuild)
 }
 

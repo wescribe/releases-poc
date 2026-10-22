@@ -209,6 +209,8 @@ scripts/
   make-placeholder.js   deterministic abstract SVG generator
 site/
   styles.css, theme.js  copied to dist/assets/
+client/
+  islands.jsx     React islands (Base UI tooltips on the copy-link buttons), bundled by esbuild to dist/assets/islands.js
 public/
   favicon.ico, apple-touch-icon.png   copied to the dist/ root as-is (from app.spokenote.com)
 test/                   node --test suites
@@ -222,7 +224,7 @@ With the Google Analytics tag loaded, `site/theme.js` sends these custom events.
 | Event | When | Parameters |
 |---|---|---|
 | `toc_click` | A link in "On this page" is clicked | `section` (heading text), `section_id` |
-| `section_link_copy` | The link icon beside a section heading is clicked and the URL is copied | `section_id` |
+| `section_link_copy` | The link icon beside a section heading is clicked and the URL is copied (sent from `client/islands.jsx`) | `section_id` |
 | `share` | A share option is chosen | `method` (facebook, x, linkedin, whatsapp, telegram, email, sms), `content_type` = release |
 | `view_markdown` | "View as markdown" is clicked | |
 | `carousel_nav` | A What's new arrow is clicked | `direction` (previous, next) |
@@ -235,6 +237,10 @@ With the Google Analytics tag loaded, `site/theme.js` sends these custom events.
 Feedback votes are also kept in the visitor's localStorage under `feedback:<release>`, so a page remembers the answer and does not ask again on that browser. Nothing is shown to visitors in aggregate; the counts live only in Google Analytics.
 
 ## Deployment
+
+## Client code
+
+The pages are static HTML. `site/theme.js` is plain, dependency-free JavaScript for the theme toggle, menus, carousels, scroll-spy and the section flash. Richer widgets are React islands in `client/islands.jsx`, built with [Base UI](https://base-ui.com/) components and bundled by esbuild into `dist/assets/islands.js` as part of `npm run build`. An island finds its server-rendered element and takes it over, so the page still reads without JavaScript. The first island is the tooltip on each heading's copy-link button; add new Base UI widgets there.
 
 A GitHub Actions workflow runs on every push to `main`: install, test, build with `BASE_PATH=/releases-poc/`, and deploy `dist/` to GitHub Pages. `dist/` is never committed. The repository's Pages source must be set to GitHub Actions.
 

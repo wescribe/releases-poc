@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { build as bundle } from 'esbuild'
 import { loadReleases, loadIndex } from './content.js'
 import { renderMarkdown } from './render.js'
 import { exportMarkdown } from './export.js'
@@ -8,6 +9,7 @@ import { releasePage, indexPage } from './templates.js'
 
 const SITE_DIR = fileURLToPath(new URL('../site/', import.meta.url))
 const PUBLIC_DIR = fileURLToPath(new URL('../public/', import.meta.url))   // copied to the output root as-is
+const ISLANDS_ENTRY = fileURLToPath(new URL('../client/islands.jsx', import.meta.url))   // React islands, bundled
 
 async function exists(p) {
   try { await fs.access(p); return true } catch { return false }
@@ -28,6 +30,13 @@ export async function buildSite({ contentDir, outDir, base = '/', siteUrl = 'htt
   await fs.rm(outDir, { recursive: true, force: true })
   await fs.mkdir(outDir, { recursive: true })
   await fs.cp(SITE_DIR, path.join(outDir, 'assets'), { recursive: true })
+  await bundle({
+    entryPoints: [ISLANDS_ENTRY],
+    outfile: path.join(outDir, 'assets', 'islands.js'),
+    bundle: true, minify: true, format: 'iife', target: ['es2019'], jsx: 'automatic',
+    define: { 'process.env.NODE_ENV': '"production"' },
+    logLevel: 'silent',
+  })
   if (await exists(PUBLIC_DIR)) await fs.cp(PUBLIC_DIR, outDir, { recursive: true })
   const imagesDir = path.join(contentDir, 'images')
   if (await exists(imagesDir)) await fs.cp(imagesDir, path.join(outDir, 'images'), { recursive: true })

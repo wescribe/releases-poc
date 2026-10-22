@@ -105,6 +105,7 @@ ${body}
 </main>
 <footer class="footer">${FOOTER}</footer>
 <script src="${base}assets/theme.js" defer></script>
+<script src="${base}assets/islands.js" defer></script>
 </body>
 </html>
 `

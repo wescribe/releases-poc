@@ -35,7 +35,7 @@ before(async () => {
 })
 
 test('build writes every page and asset', () => {
-  for (const p of ['index.html', 'releases/alpha/index.html', 'releases/alpha/alpha.md', 'releases/gamma/index.html', 'assets/styles.css', 'assets/theme.js', 'images/releases/alpha.svg']) {
+  for (const p of ['index.html', 'releases/alpha/index.html', 'releases/alpha/alpha.md', 'releases/gamma/index.html', 'assets/styles.css', 'assets/theme.js', 'assets/islands.js', 'images/releases/alpha.svg']) {
     assert.ok(exists(p), p)
   }
 })
@@ -139,7 +139,7 @@ test('pages built without a measurement id carry no analytics tag', () => {
 
 test('the site script reports the custom analytics events', () => {
   const js = read('assets/theme.js')
-  for (const name of ['toc_click', 'share', 'view_markdown', 'carousel_nav', 'carousel_list_select', 'image_carousel_select', 'section_link_copy', 'theme_toggle']) assert.match(js, new RegExp(`track\\('${name}'`), name)
+  for (const name of ['toc_click', 'share', 'view_markdown', 'carousel_nav', 'carousel_list_select', 'image_carousel_select', 'theme_toggle']) assert.match(js, new RegExp(`track\\('${name}'`), name)
   assert.match(js, /typeof window\.gtag === 'function'/)
 })
 
@@ -232,4 +232,15 @@ test('theme script toggles data-theme, persists to localStorage and runs a scrol
   assert.match(js, /localStorage/)
   assert.match(js, /data-theme/)
   assert.match(js, /IntersectionObserver/)
+})
+
+test('the React islands bundle is loaded after theme.js and carries the section link copy event', () => {
+  const html = read('releases/alpha/index.html')
+  const theme = html.indexOf('<script src="/poc/assets/theme.js" defer></script>')
+  const islands = html.indexOf('<script src="/poc/assets/islands.js" defer></script>')
+  assert.ok(theme > 0 && islands > theme, 'islands.js follows theme.js')
+  const js = read('assets/islands.js')
+  assert.match(js, /section_link_copy/)
+  assert.match(js, /Copy URL to this section/)
+  assert.doesNotMatch(js, /process\.env\.NODE_ENV/)
 })
