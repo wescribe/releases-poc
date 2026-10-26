@@ -82,8 +82,8 @@ test('carousel-list renders a list of triggers and a stack of images, first item
   assert.match(html, /<button class="carousel-list-trigger" type="button" aria-pressed="true" data-index="0"><strong>Contact Card<\/strong> with a photo\.<\/button>/)
   assert.match(html, /<button class="carousel-list-trigger" type="button" aria-pressed="false" data-index="1"><strong>vCard<\/strong> with one tap\.<\/button>/)
   assert.match(html, /<div class="carousel-list-visual">/)
-  assert.match(html, /<img class="carousel-list-image" data-index="0" src="\/poc\/images\/blocks\/a\.svg" alt="Block A">/)
-  assert.match(html, /<img class="carousel-list-image" data-index="1" src="\/poc\/images\/blocks\/b\.svg" alt="Block B" hidden>/)
+  assert.match(html, /<span class="zoomable"><img class="carousel-list-image" data-index="0" src="\/poc\/images\/blocks\/a\.svg" alt="Block A"><button class="zoom-trigger"/)
+  assert.match(html, /<span class="zoomable" hidden><img class="carousel-list-image" data-index="1" src="\/poc\/images\/blocks\/b\.svg" alt="Block B"><button class="zoom-trigger"/)
   assert.doesNotMatch(html, /<p>/)
 })
 
@@ -98,7 +98,7 @@ test('carousel-list warns on non-item children, a lone item, or an item without 
   const noImage = renderMarkdown('::::carousel-list\n:::item\nA\n:::\n:::item{image=/b.svg alt="B"}\nB\n:::\n::::', base)
   assert.equal(noImage.warnings.length, 1)
   assert.match(noImage.warnings[0], /image/)
-  assert.match(noImage.html, /<img class="carousel-list-image" data-index="0" src="" alt="">/)
+  assert.match(noImage.html, /<span class="zoomable"><img class="carousel-list-image" data-index="0" src="" alt="">/)
 })
 
 test('an item outside a carousel-list is an unknown directive', () => {
@@ -111,7 +111,7 @@ test('image-carousel renders its images in one frame with a dot per image, first
   const { html, warnings } = renderMarkdown(':::image-carousel\n![First](/images/a.png)\n\n![Second](/images/b.png)\n:::', { base: '/poc/' })
   assert.deepEqual(warnings, [])
   assert.match(html, /<div class="image-carousel" data-image-carousel>/)
-  assert.match(html, /<div class="image-carousel-frame"><img class="image-carousel-image" data-index="0" src="\/poc\/images\/a\.png" alt="First"><img class="image-carousel-image" data-index="1" src="\/poc\/images\/b\.png" alt="Second" hidden><\/div>/)
+  assert.match(html, /<div class="image-carousel-frame"><span class="zoomable"><img class="image-carousel-image" data-index="0" src="\/poc\/images\/a\.png" alt="First"><button class="zoom-trigger"[\s\S]*?<\/button><\/span><span class="zoomable" hidden><img class="image-carousel-image" data-index="1" src="\/poc\/images\/b\.png" alt="Second"><button class="zoom-trigger"[\s\S]*?<\/button><\/span><\/div>/)
   assert.match(html, /<div class="image-carousel-dots"><button class="image-carousel-dot" type="button" aria-pressed="true" aria-label="Show image 1 of 2" data-index="0"><\/button><button class="image-carousel-dot" type="button" aria-pressed="false" aria-label="Show image 2 of 2" data-index="1"><\/button><\/div>/)
   assert.doesNotMatch(html, /<p>/)
 })
@@ -139,4 +139,10 @@ test('a columns block that holds a heading is wrapped as one section', () => {
   assert.match(html, /^<section class="section"><div class="columns columns-2">/)
   assert.match(html, /<\/div>\n<\/section><section class="section"><h2 id="plain">/)
   assert.deepEqual(headings.map(h => h.text), ['Left', 'Plain'])
+})
+
+test('every content image gets a full-screen button in a zoomable wrapper', () => {
+  const { html } = renderMarkdown('Text\n\n![A shot](/images/a.png)', { base: '/poc/' })
+  assert.match(html, /<p><span class="zoomable"><img src="\/poc\/images\/a\.png" alt="A shot"><button class="zoom-trigger" type="button" aria-label="View full screen"><svg[\s\S]*?<\/svg><\/button><\/span><\/p>/)
+  assert.equal(html.match(/zoom-trigger/g).length, 1)
 })

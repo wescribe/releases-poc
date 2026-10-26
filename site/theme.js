@@ -145,7 +145,8 @@
     function show(index) {
       active = index
       triggers.forEach(function (t, i) { t.setAttribute('aria-pressed', i === index ? 'true' : 'false') })
-      panels.forEach(function (p, i) { p.hidden = i !== index })
+      // Each image is wrapped by the build (zoomable); the wrapper is what shows and hides.
+      panels.forEach(function (p, i) { (p.closest('.zoomable') || p).hidden = i !== index })
     }
     function stop() { if (timer) { clearInterval(timer); timer = null } }
     triggers.forEach(function (t, i) {

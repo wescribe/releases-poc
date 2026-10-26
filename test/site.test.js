@@ -242,6 +242,7 @@ test('the React islands bundle is loaded after theme.js and carries the section 
   const js = read('assets/islands.js')
   assert.match(js, /section_link_copy/)
   assert.match(js, /Copy URL to this section/)
+  assert.match(js, /image_zoom/)
   assert.doesNotMatch(js, /process\.env\.NODE_ENV/)
 })
 

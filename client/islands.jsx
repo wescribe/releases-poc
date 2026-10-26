@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createPortal } from 'react-dom'
 import { Tooltip } from '@base-ui/react/tooltip'
+import { Dialog } from '@base-ui/react/dialog'
 
 const release = document.body.getAttribute('data-release') || 'index'
 
@@ -73,6 +74,99 @@ function SectionLink({ anchor }) {
   )
 }
 
+function CloseIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  )
+}
+
+function ChevronIcon({ direction }) {
+  const d = direction === 'left' ? 'M15 18l-6-6 6-6' : 'M9 18l6-6-6-6'
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={d} />
+    </svg>
+  )
+}
+
+// Full-screen image viewer. One dialog serves every zoom button on the page;
+// the button's sibling image is what gets shown. If that image sits in a
+// carousel, the viewer takes the whole carousel's images and adds previous
+// and next arrows (and the arrow keys) that wrap around. Escape, the close
+// button and a click on the backdrop all close it. The last set of images
+// stays mounted while the dialog fades out.
+function Lightbox() {
+  const [open, setOpen] = useState(false)
+  const [images, setImages] = useState([])
+  const [index, setIndex] = useState(0)
+  const count = images.length
+
+  useEffect(() => {
+    const triggers = Array.from(document.querySelectorAll('.zoom-trigger'))
+    const describe = img => ({ src: img.currentSrc || img.src, alt: img.alt })
+    const onClick = event => {
+      const img = event.currentTarget.parentNode.querySelector('img')
+      if (!img) return
+      const carousel = img.closest('[data-carousel-list], [data-image-carousel]')
+      const group = carousel ? Array.from(carousel.querySelectorAll('.zoomable img')) : [img]
+      setImages(group.map(describe))
+      setIndex(Math.max(0, group.indexOf(img)))
+      setOpen(true)
+      track('image_zoom', { alt: img.alt.slice(0, 100), in_carousel: carousel ? 'yes' : 'no' })
+    }
+    triggers.forEach(t => t.addEventListener('click', onClick))
+    return () => triggers.forEach(t => t.removeEventListener('click', onClick))
+  }, [])
+
+  function step(direction) {
+    if (count < 2) return
+    setIndex(i => (i + direction + count) % count)
+    track('image_zoom_nav', { direction: direction > 0 ? 'next' : 'previous' })
+  }
+
+  // Arrow keys move through the set. Focus sits inside the popup while it is
+  // open, so the popup's own handler catches them; the document listener is a
+  // fallback for when focus is elsewhere (for example after a backdrop click).
+  function onKeyDown(event) {
+    if (count < 2) return
+    if (event.key === 'ArrowRight') { event.preventDefault(); step(1) }
+    if (event.key === 'ArrowLeft') { event.preventDefault(); step(-1) }
+  }
+  useEffect(() => {
+    if (!open || count < 2) return undefined
+    const onDocumentKey = event => {
+      if (event.defaultPrevented) return
+      onKeyDown(event)
+    }
+    document.addEventListener('keydown', onDocumentKey)
+    return () => document.removeEventListener('keydown', onDocumentKey)
+  }, [open, count])
+
+  const image = images[index]
+  return (
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Portal>
+        <Dialog.Backdrop className="lightbox-backdrop" />
+        <Dialog.Popup className="lightbox-popup" aria-label={image?.alt ? undefined : 'Image'} onKeyDown={onKeyDown}>
+          {image?.alt && <Dialog.Title className="lightbox-title">{image.alt}</Dialog.Title>}
+          {count > 1 && <span className="lightbox-count" aria-live="polite">{index + 1} of {count}</span>}
+          {image && <img key={image.src} className="lightbox-image" src={image.src} alt={image.alt} />}
+          {count > 1 && (
+            <button type="button" className="lightbox-arrow lightbox-prev" aria-label="Previous image" onClick={() => step(-1)}><ChevronIcon direction="left" /></button>
+          )}
+          {count > 1 && (
+            <button type="button" className="lightbox-arrow lightbox-next" aria-label="Next image" onClick={() => step(1)}><ChevronIcon direction="right" /></button>
+          )}
+          <Dialog.Close className="lightbox-close" aria-label="Close"><CloseIcon /></Dialog.Close>
+        </Dialog.Popup>
+      </Dialog.Portal>
+    </Dialog.Root>
+  )
+}
+
 // Replace each server-rendered copy-link button with a host span, then render
 // every island from one root so the tooltips share one provider.
 const hosts = Array.from(document.querySelectorAll('button.section-link')).map(button => {
@@ -82,13 +176,18 @@ const hosts = Array.from(document.querySelectorAll('button.section-link')).map(b
   return { host, anchor: button.getAttribute('data-anchor') }
 })
 
-if (hosts.length) {
+const hasZoom = document.querySelector('.zoom-trigger') !== null
+
+if (hosts.length || hasZoom) {
   const mount = document.createElement('div')
   mount.hidden = true
   document.body.appendChild(mount)
   createRoot(mount).render(
-    <Tooltip.Provider delay={150}>
-      {hosts.map(({ host, anchor }) => createPortal(<SectionLink anchor={anchor} />, host, anchor))}
-    </Tooltip.Provider>
+    <>
+      <Tooltip.Provider delay={150}>
+        {hosts.map(({ host, anchor }) => createPortal(<SectionLink anchor={anchor} />, host, anchor))}
+      </Tooltip.Provider>
+      {hasZoom && <Lightbox />}
+    </>
   )
 }

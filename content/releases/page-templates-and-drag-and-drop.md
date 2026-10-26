@@ -13,7 +13,7 @@ hero: /images/releases/page-templates-and-drag-and-drop.png
 - **Manage your templates.** A new Page Templates screen lets you review and delete your saved templates. Templates can be shared with teammates in your workspace.
 ::::
 ::::column
-![Choosing a template when creating a page](/images/releases/templates-modal.png)
+![Select a template](/images/releases/templates-modal.png)
 ::::
 :::::
 

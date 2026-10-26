@@ -174,7 +174,8 @@ main { max-width: var(--page); margin: 0 auto; padding: 40px 24px 64px; }
 .columns > .column > * + h2 { margin-top: 44px; }
 .content h2 { font-size: 24px; font-weight: 650; padding-top: 8px; margin-bottom: 12px; scroll-margin-top: 80px; }
 .content h3 { font-size: 18px; font-weight: 600; margin: 24px 0 6px; }
-.content img { border-radius: var(--radius); border: 1px solid var(--border); margin: 4px 0 16px; }
+.content img { border-radius: var(--radius); border: 1px solid var(--border); margin: 0; }
+.content .zoomable { margin: 4px 0 16px; }
 .content > p:first-child, .content > ul:first-child { margin-top: 0; }
 
 /* Sections: a heading and its content. A section that the URL hash points at
@@ -253,14 +254,14 @@ h2:hover .section-link, .section-link:focus-visible, .section-link[data-popup-op
    below stays fully opaque, then the old one is hidden, so nothing shows
    through mid-change. */
 .carousel-list-visual { min-width: 0; display: grid; align-items: start; }
-.carousel-list-visual img { margin: 0; grid-area: 1 / 1; }
-.carousel-list-image:not([hidden]) { z-index: 1; }
-.carousel-list-image[hidden] { display: block; visibility: hidden; opacity: 0; }
+.carousel-list-visual > .zoomable { grid-area: 1 / 1; margin: 0; }
+.carousel-list-visual > .zoomable:not([hidden]) { z-index: 1; }
+.carousel-list-visual > .zoomable[hidden] { display: block; visibility: hidden; opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   .carousel-list-trigger { transition: color 0.2s ease; }
   .carousel-list-trigger::before { transition: background-color 0.2s ease; }
-  .carousel-list-image { transition: opacity 0.3s ease; }
-  .carousel-list-image[hidden] { transition: opacity 0s linear 0.3s, visibility 0s linear 0.3s; }
+  .carousel-list-visual > .zoomable { transition: opacity 0.3s ease; }
+  .carousel-list-visual > .zoomable[hidden] { transition: opacity 0s linear 0.3s, visibility 0s linear 0.3s; }
 }
 
 /* Image carousel: every image occupies the same grid cell, so the frame is as
@@ -268,9 +269,9 @@ h2:hover .section-link, .section-link:focus-visible, .section-link[data-popup-op
    centered. A dot per image sits centered below. theme.js advances it. */
 .image-carousel { margin: 4px 0 16px; }
 .image-carousel-frame { display: grid; align-items: center; justify-items: center; }
-.image-carousel-image { grid-area: 1 / 1; margin: 0; }
-.image-carousel-image:not([hidden]) { z-index: 1; }
-.image-carousel-image[hidden] { display: block; visibility: hidden; opacity: 0; }
+.image-carousel-frame > .zoomable { grid-area: 1 / 1; margin: 0; }
+.image-carousel-frame > .zoomable:not([hidden]) { z-index: 1; }
+.image-carousel-frame > .zoomable[hidden] { display: block; visibility: hidden; opacity: 0; }
 .image-carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
 .image-carousel-dot {
   width: 10px; height: 10px; padding: 0; border: 0; border-radius: 999px;
@@ -280,10 +281,76 @@ h2:hover .section-link, .section-link:focus-visible, .section-link[data-popup-op
 .image-carousel-dot:focus-visible { outline: 2px solid var(--button); outline-offset: 2px; }
 .image-carousel-dot[aria-pressed="true"] { background: var(--button); }
 @media (prefers-reduced-motion: no-preference) {
-  .image-carousel-image { transition: opacity 0.3s ease; }
-  .image-carousel-image[hidden] { transition: opacity 0s linear 0.3s, visibility 0s linear 0.3s; }
+  .image-carousel-frame > .zoomable { transition: opacity 0.3s ease; }
+  .image-carousel-frame > .zoomable[hidden] { transition: opacity 0s linear 0.3s, visibility 0s linear 0.3s; }
   .image-carousel-dot { transition: background-color 0.2s ease; }
 }
+
+/* Zoomable images: an invisible button covers the whole image, so a click
+   anywhere opens the viewer; its round icon appears at the center on hover.
+   The viewer itself is a Base UI dialog (client/islands.jsx). */
+.zoomable { position: relative; display: block; }
+.zoom-trigger {
+  position: absolute; inset: 0; width: 100%; height: 100%; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 0; border-radius: var(--radius); background: none; color: #fff; cursor: zoom-in;
+}
+.zoom-trigger svg {
+  display: block; box-sizing: border-box; width: 44px; height: 44px; padding: 13px;
+  border-radius: 999px; background: rgba(15, 23, 42, 0.72);
+  opacity: 0; transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+.zoomable:hover .zoom-trigger svg, .zoom-trigger:focus-visible svg { opacity: 1; }
+.zoom-trigger:hover svg { background: rgba(15, 23, 42, 0.88); }
+.zoom-trigger:focus-visible { outline: 2px solid var(--button); outline-offset: -2px; }
+@media (hover: none) { .zoom-trigger svg { opacity: 0.85; } }
+
+/* Full-screen image viewer. The popup takes no pointer events itself, so a
+   click on the dark backdrop counts as outside the dialog and closes it. */
+.lightbox-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(0, 0, 0, 0.88); transition: opacity 0.2s ease; }
+.lightbox-backdrop[data-starting-style], .lightbox-backdrop[data-ending-style] { opacity: 0; }
+.lightbox-popup { position: fixed; inset: 72px 72px 24px; z-index: 101; display: grid; place-items: center; outline: none; pointer-events: none; transition: opacity 0.2s ease; }
+.lightbox-popup[data-starting-style], .lightbox-popup[data-ending-style] { opacity: 0; }
+/* The popup is inset 72px top and sides and 24px bottom; the image is capped
+   against the viewport with the same insets, since a percentage max-height
+   has nothing definite to resolve against inside the grid. */
+.lightbox-image {
+  display: block; width: auto; height: auto;
+  max-width: calc(100vw - 144px); max-height: calc(100vh - 96px);
+  object-fit: contain; border-radius: var(--radius); pointer-events: auto;
+}
+.lightbox-title {
+  position: fixed; top: 16px; left: 24px; right: 76px; pointer-events: auto; margin: 0;
+  color: #fff; font-size: 15px; font-weight: 500; line-height: 44px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lightbox-count {
+  position: fixed; top: 16px; right: 76px; pointer-events: auto;
+  color: rgba(255, 255, 255, 0.75); font-size: 13px; font-variant-numeric: tabular-nums; line-height: 44px; white-space: nowrap;
+}
+.lightbox-title { right: 160px; }
+.lightbox-arrow {
+  position: fixed; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; pointer-events: auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9); color: #fff; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+.lightbox-arrow svg { display: block; }
+.lightbox-arrow:hover { background: #0f172a; border-color: #fff; }
+.lightbox-arrow:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.lightbox-prev { left: 16px; }
+.lightbox-next { right: 16px; }
+.lightbox-close {
+  position: fixed; top: 16px; right: 16px; width: 44px; height: 44px; pointer-events: auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9); color: #fff; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+.lightbox-close svg { display: block; }
+.lightbox-close:hover { background: #0f172a; border-color: #fff; }
+.lightbox-close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 .directive-unknown { outline: 2px dashed #dc2626; outline-offset: 4px; margin: 16px 0; }
 .directive-unknown::before { content: "Unknown block type"; display: block; color: #dc2626; font-size: 13px; font-weight: 600; margin-bottom: 4px; }

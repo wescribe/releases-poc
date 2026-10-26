@@ -69,6 +69,36 @@ function rehypeSections() {
   }
 }
 
+const ZOOM_ICON = {
+  type: 'element', tagName: 'svg',
+  properties: { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', ariaHidden: 'true' },
+  children: [
+    { type: 'element', tagName: 'polyline', properties: { points: '15 3 21 3 21 9' }, children: [] },
+    { type: 'element', tagName: 'polyline', properties: { points: '9 21 3 21 3 15' }, children: [] },
+    { type: 'element', tagName: 'line', properties: { x1: 21, y1: 3, x2: 14, y2: 10 }, children: [] },
+    { type: 'element', tagName: 'line', properties: { x1: 3, y1: 21, x2: 10, y2: 14 }, children: [] },
+  ],
+}
+
+// Every image in the content is wrapped with a button that opens it full
+// screen (client/islands.jsx). A carousel image's hidden flag moves to the
+// wrapper, which is what the carousel shows and hides.
+function rehypeZoomableImages() {
+  return tree => {
+    visit(tree, 'element', (node, index, parent) => {
+      if (node.tagName !== 'img' || !parent) return
+      const hidden = node.properties?.hidden === true
+      if (hidden) delete node.properties.hidden
+      const button = {
+        type: 'element', tagName: 'button',
+        properties: { className: ['zoom-trigger'], type: 'button', ariaLabel: 'View full screen' },
+        children: [ZOOM_ICON],
+      }
+      parent.children[index] = { type: 'element', tagName: 'span', properties: { className: ['zoomable'], hidden }, children: [node, button] }
+    })
+  }
+}
+
 export function renderMarkdown(markdown, { base = '/' } = {}) {
   const headings = []
   const file = unified()
@@ -82,6 +112,7 @@ export function renderMarkdown(markdown, { base = '/' } = {}) {
     .use(rehypeSlug)
     .use(rehypeCollectAndRebase, { base, headings })
     .use(rehypeSections)
+    .use(rehypeZoomableImages)
     .use(rehypeStringify)
     .processSync(markdown)
   return { html: String(file), headings, warnings: file.messages.map(m => m.reason) }

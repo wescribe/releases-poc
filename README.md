@@ -230,6 +230,8 @@ With the Google Analytics tag loaded, `site/theme.js` sends these custom events.
 | `carousel_nav` | A What's new arrow is clicked | `direction` (previous, next) |
 | `carousel_list_select` | A carousel list item is clicked, which also stops the auto-advance | `item` (the item's text, up to 100 characters) |
 | `image_carousel_select` | An image carousel dot is clicked, which also stops the auto-advance | `index` (1-based position of the image) |
+| `image_zoom` | The full-screen button on a content image is clicked (sent from `client/islands.jsx`) | `alt` (the image's alt text, up to 100 characters), `in_carousel` (yes, no) |
+| `image_zoom_nav` | An arrow or arrow key moves to another image inside the full-screen viewer | `direction` (previous, next) |
 | `theme_toggle` | The light/dark button is clicked | `theme` (the mode switched to) |
 | `page_feedback` | Yes or No is clicked on "Did this page help you?" | `helpful` (yes, no); `changed_from` when a visitor switches an earlier vote |
 | `open_in_ai` | An option under "More actions" is chosen | `assistant` (claude, chatgpt) |
@@ -240,7 +242,7 @@ Feedback votes are also kept in the visitor's localStorage under `feedback:<rele
 
 ## Client code
 
-The pages are static HTML. `site/theme.js` is plain, dependency-free JavaScript for the theme toggle, menus, carousels, scroll-spy and the section flash. Richer widgets are React islands in `client/islands.jsx`, built with [Base UI](https://base-ui.com/) components and bundled by esbuild into `dist/assets/islands.js` as part of `npm run build`. An island finds its server-rendered element and takes it over, so the page still reads without JavaScript. The first island is the tooltip on each heading's copy-link button; add new Base UI widgets there.
+The pages are static HTML. `site/theme.js` is plain, dependency-free JavaScript for the theme toggle, menus, carousels, scroll-spy and the section flash. Richer widgets are React islands in `client/islands.jsx`, built with [Base UI](https://base-ui.com/) components and bundled by esbuild into `dist/assets/islands.js` as part of `npm run build`. An island finds its server-rendered element and takes it over, so the page still reads without JavaScript. The islands so far are the tooltip on each heading's copy-link button and the full-screen image viewer, a Base UI dialog opened by the button the build places over every content image; add new Base UI widgets there.
 
 A GitHub Actions workflow runs on every push to `main`: install, test, build with `BASE_PATH=/releases-poc/`, and deploy `dist/` to GitHub Pages. `dist/` is never committed. The repository's Pages source must be set to GitHub Actions.
 
