@@ -155,6 +155,8 @@
         onSelect(t, i)
       })
     })
+    // Decode every image up front so a change never waits on a decode.
+    panels.forEach(function (p) { if (p.decode) p.decode().catch(function () { /* shown undecoded */ }) })
     if (!noMotion) timer = setInterval(function () { show((active + 1) % triggers.length) }, 4000)
   }
   function all(root, selector) { return Array.prototype.slice.call(root.querySelectorAll(selector)) }

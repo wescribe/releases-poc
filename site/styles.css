@@ -249,15 +249,19 @@ h2:hover .section-link, .section-link:focus-visible, .section-link[data-popup-op
 .carousel-list-trigger:focus-visible { outline: 2px solid var(--button); outline-offset: -2px; border-radius: 4px; }
 .carousel-list-trigger[aria-pressed="true"] { color: var(--text); }
 .carousel-list-trigger[aria-pressed="true"]::before { background: var(--button); }
-.carousel-list-visual { min-width: 0; }
-.carousel-list-visual img { margin: 0; }
-.carousel-list-image[hidden] { display: none; }
+/* Images share one grid cell. The active one fades in on top while the one
+   below stays fully opaque, then the old one is hidden, so nothing shows
+   through mid-change. */
+.carousel-list-visual { min-width: 0; display: grid; align-items: start; }
+.carousel-list-visual img { margin: 0; grid-area: 1 / 1; }
+.carousel-list-image:not([hidden]) { z-index: 1; }
+.carousel-list-image[hidden] { display: block; visibility: hidden; opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   .carousel-list-trigger { transition: color 0.2s ease; }
   .carousel-list-trigger::before { transition: background-color 0.2s ease; }
-  .carousel-list-image { animation: carousel-list-fade 0.3s ease; }
+  .carousel-list-image { transition: opacity 0.3s ease; }
+  .carousel-list-image[hidden] { transition: opacity 0s linear 0.3s, visibility 0s linear 0.3s; }
 }
-@keyframes carousel-list-fade { from { opacity: 0; } to { opacity: 1; } }
 
 /* Image carousel: every image occupies the same grid cell, so the frame is as
    tall as the tallest image and never changes height; shorter images sit
@@ -265,7 +269,8 @@ h2:hover .section-link, .section-link:focus-visible, .section-link[data-popup-op
 .image-carousel { margin: 4px 0 16px; }
 .image-carousel-frame { display: grid; align-items: center; justify-items: center; }
 .image-carousel-image { grid-area: 1 / 1; margin: 0; }
-.image-carousel-image[hidden] { display: block; visibility: hidden; }
+.image-carousel-image:not([hidden]) { z-index: 1; }
+.image-carousel-image[hidden] { display: block; visibility: hidden; opacity: 0; }
 .image-carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
 .image-carousel-dot {
   width: 10px; height: 10px; padding: 0; border: 0; border-radius: 999px;
@@ -275,8 +280,8 @@ h2:hover .section-link, .section-link:focus-visible, .section-link[data-popup-op
 .image-carousel-dot:focus-visible { outline: 2px solid var(--button); outline-offset: 2px; }
 .image-carousel-dot[aria-pressed="true"] { background: var(--button); }
 @media (prefers-reduced-motion: no-preference) {
-  .image-carousel-image { transition: opacity 0.3s ease, visibility 0.3s; }
-  .image-carousel-image[hidden] { opacity: 0; }
+  .image-carousel-image { transition: opacity 0.3s ease; }
+  .image-carousel-image[hidden] { transition: opacity 0s linear 0.3s, visibility 0s linear 0.3s; }
   .image-carousel-dot { transition: background-color 0.2s ease; }
 }
 

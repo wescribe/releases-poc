@@ -56,18 +56,14 @@ The page builder goes beyond video, images, and buttons to offer additional cont
 - **Drag and drop.** Rearrange blocks by dragging them. Drop a block anywhere below the last one to add it to the end.
 - **Undo and redo.** Use the buttons or the keyboard shortcuts you already know.
 - **Live previews in the editor panel.** Video and image blocks show the media itself.
+- **Safer publishing.** Publish now refuses a video, image, or audio block that has no media, so you never ship an empty player. Links on pages open only web, phone, text, and email addresses.
+- **Sensible limits.** A page holds up to 10 blocks.
 ::::
 ::::column
 :::image-carousel
-![Dragging a block to a new position in the page editor](/images/releases/drag-and-drop.png)
+![Picking up the Social Follow block from the builder palette](/images/releases/drag-and-drop-1.png)
 
-![The add-block menu with the new block types](/images/releases/content-block-types.png)
-:::
-
-:::callout{type=tip}
-**Safer publishing.** Publish now refuses a video, image, or audio block that has no media, so you never ship an empty player. Links on pages open only web, phone, text, and email addresses.
-
-**Sensible limits.** A page holds up to 10 blocks.
+![Dropping a Social Follow block onto the page preview](/images/releases/drag-and-drop-2.png)
 :::
 ::::
 :::::
