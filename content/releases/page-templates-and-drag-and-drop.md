@@ -1,7 +1,7 @@
 ---
 title: Page templates, new blocks, and a drag-and-drop editor
 summary: Start a page from a template, add contact cards, link lists, and meeting schedulers, and rearrange blocks by dragging.
-date: 2026-10-22
+date: 2026-10-26
 version: 2.20.0
 hero: /images/releases/page-templates-and-drag-and-drop.png
 ---
