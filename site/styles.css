@@ -390,11 +390,16 @@ h2:hover .section-link, .section-link:focus-visible, .section-link[data-popup-op
   border: 1px solid var(--border-strong); background: none; color: var(--text);
   font: inherit; font-size: 13px; font-weight: 500; line-height: 1.3; cursor: pointer;
 }
-.rail-actions .export-link:hover, .share-toggle:hover, .share-toggle[aria-expanded="true"],
-.actions-toggle:hover, .actions-toggle[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+.rail-actions .export-link:hover, .share-toggle:hover, .share-toggle[aria-expanded="true"], .share-toggle[data-popup-open],
+.actions-toggle:hover, .actions-toggle[aria-expanded="true"], .actions-toggle[data-popup-open] { border-color: var(--accent); color: var(--accent); text-decoration: none; }
 .share-toggle, .actions-toggle { display: inline-flex; align-items: center; gap: 6px; }
 .share-toggle svg, .actions-toggle svg { transition: transform 150ms ease; }
-.share-toggle[aria-expanded="true"] svg, .actions-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.share-toggle[aria-expanded="true"] svg, .actions-toggle[aria-expanded="true"] svg,
+.share-toggle[data-popup-open] svg, .actions-toggle[data-popup-open] svg { transform: rotate(180deg); }
+/* Base UI places the menu popups (client/islands.jsx): the positioner carries
+   the position, so the popup itself sits statically inside it. */
+.menu-positioner { z-index: 5; }
+.menu-positioner > .share-menu, .menu-positioner > .actions-menu { position: static; }
 .actions { position: relative; }
 .actions-menu {
   position: absolute; top: calc(100% + 6px); left: 0; z-index: 5;

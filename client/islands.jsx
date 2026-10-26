@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client'
 import { createPortal } from 'react-dom'
 import { Tooltip } from '@base-ui/react/tooltip'
 import { Dialog } from '@base-ui/react/dialog'
+import { Menu } from '@base-ui/react/menu'
 
 const release = document.body.getAttribute('data-release') || 'index'
 
@@ -167,6 +168,69 @@ function Lightbox() {
   )
 }
 
+// Rail dropdowns ("Share this page", "More actions"). The server renders a
+// toggle button and a list of links; the island re-renders them as a Base UI
+// menu whose popup lives in a portal and avoids the viewport edges, so an
+// open menu can never widen the page. The classes are the same, so the look
+// is unchanged.
+function RailMenu({ toggleClass, toggleHtml, menuClass, items, onPick }) {
+  return (
+    <Menu.Root modal={false}>
+      <Menu.Trigger className={toggleClass} dangerouslySetInnerHTML={{ __html: toggleHtml }} />
+      <Menu.Portal>
+        <Menu.Positioner className="menu-positioner" side="bottom" align="start" sideOffset={6} collisionPadding={16}>
+          <Menu.Popup className={menuClass}>
+            {items.map(item => (
+              <Menu.LinkItem
+                key={item.key}
+                className={item.className || undefined}
+                href={item.href}
+                target={item.target || undefined}
+                rel={item.rel || undefined}
+                onClick={() => onPick(item.key)}
+                dangerouslySetInnerHTML={{ __html: item.html }}
+              />
+            ))}
+          </Menu.Popup>
+        </Menu.Positioner>
+      </Menu.Portal>
+    </Menu.Root>
+  )
+}
+
+// Each network's share URL is built from the page URL plus a generated
+// message, where the network accepts one. Email and SMS open in place.
+function shareUrls(menu) {
+  const pageUrl = location.origin + location.pathname
+  const message = menu.getAttribute('data-message') || document.title
+  const subject = menu.getAttribute('data-subject') || document.title
+  const enc = encodeURIComponent
+  return {
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + enc(pageUrl),
+    x: 'https://x.com/intent/post?text=' + enc(message) + '&url=' + enc(pageUrl),
+    linkedin: 'https://www.linkedin.com/feed/?shareActive=true&text=' + enc(message + ' ' + pageUrl),
+    whatsapp: 'https://wa.me/?text=' + enc(message + ' ' + pageUrl),
+    telegram: 'https://t.me/share/url?url=' + enc(pageUrl) + '&text=' + enc(message),
+    email: 'mailto:?subject=' + enc(subject) + '&body=' + enc(message + '\n\n' + pageUrl),
+    sms: 'sms:?&body=' + enc(message + ' ' + pageUrl),
+  }
+}
+
+// Read a server-rendered rail menu, empty its container and describe it for RailMenu.
+function readMenu(selector, toggleClass, menuClass, dataKey, hrefFor) {
+  const container = document.querySelector(selector)
+  const toggle = container && container.querySelector('.' + toggleClass)
+  const menu = container && container.querySelector('.' + menuClass)
+  if (!toggle || !menu) return null
+  const items = Array.from(menu.querySelectorAll('a[' + dataKey + ']')).map(a => {
+    const key = a.getAttribute(dataKey)
+    return { key, className: a.getAttribute('class'), href: hrefFor(key, a, menu), target: a.getAttribute('target'), rel: a.getAttribute('rel'), html: a.innerHTML }
+  })
+  const toggleHtml = toggle.innerHTML
+  container.replaceChildren()
+  return { container, toggleHtml, items }
+}
+
 // Replace each server-rendered copy-link button with a host span, then render
 // every island from one root so the tooltips share one provider.
 const hosts = Array.from(document.querySelectorAll('button.section-link')).map(button => {
@@ -178,7 +242,11 @@ const hosts = Array.from(document.querySelectorAll('button.section-link')).map(b
 
 const hasZoom = document.querySelector('.zoom-trigger') !== null
 
-if (hosts.length || hasZoom) {
+const share = readMenu('.share', 'share-toggle', 'share-menu', 'data-share', (key, a, menu) => shareUrls(menu)[key] || a.getAttribute('href'))
+if (share) share.items.forEach(item => { if (item.key === 'email' || item.key === 'sms') item.target = null })
+const actions = readMenu('.actions', 'actions-toggle', 'actions-menu', 'data-action', (key, a) => a.getAttribute('href'))
+
+if (hosts.length || hasZoom || share || actions) {
   const mount = document.createElement('div')
   mount.hidden = true
   document.body.appendChild(mount)
@@ -188,6 +256,14 @@ if (hosts.length || hasZoom) {
         {hosts.map(({ host, anchor }) => createPortal(<SectionLink anchor={anchor} />, host, anchor))}
       </Tooltip.Provider>
       {hasZoom && <Lightbox />}
+      {share && createPortal(
+        <RailMenu toggleClass="share-toggle" toggleHtml={share.toggleHtml} menuClass="share-menu" items={share.items}
+          onPick={key => track('share', { method: key, content_type: 'release' })} />,
+        share.container, 'share')}
+      {actions && createPortal(
+        <RailMenu toggleClass="actions-toggle" toggleHtml={actions.toggleHtml} menuClass="actions-menu" items={actions.items}
+          onPick={key => track('open_in_ai', { assistant: key })} />,
+        actions.container, 'actions')}
     </>
   )
 }

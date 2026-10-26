@@ -139,7 +139,7 @@ test('pages built without a measurement id carry no analytics tag', () => {
 
 test('the site script reports the custom analytics events', () => {
   const js = read('assets/theme.js')
-  for (const name of ['toc_click', 'share', 'view_markdown', 'carousel_nav', 'carousel_list_select', 'image_carousel_select', 'theme_toggle']) assert.match(js, new RegExp(`track\\('${name}'`), name)
+  for (const name of ['toc_click', 'view_markdown', 'carousel_nav', 'carousel_list_select', 'image_carousel_select', 'theme_toggle']) assert.match(js, new RegExp(`track\\('${name}'`), name)
   assert.match(js, /typeof window\.gtag === 'function'/)
 })
 
@@ -243,6 +243,8 @@ test('the React islands bundle is loaded after theme.js and carries the section 
   assert.match(js, /section_link_copy/)
   assert.match(js, /Copy URL to this section/)
   assert.match(js, /image_zoom/)
+  for (const name of ['share', 'open_in_ai']) assert.match(js, new RegExp(`"${name}"|'${name}'`), name)
+  assert.match(js, /sharer\.php\?u=/)
   assert.doesNotMatch(js, /process\.env\.NODE_ENV/)
 })
 

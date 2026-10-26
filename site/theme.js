@@ -47,44 +47,7 @@
     else if (narrow.addListener) narrow.addListener(placeActions)
   }
 
-  // Share menu: builds each network's share URL from the page URL plus a
-  // generated message, where the network accepts one.
-  var share = document.querySelector('.share')
-  if (share) {
-    var shareToggle = share.querySelector('.share-toggle')
-    var shareMenu = share.querySelector('.share-menu')
-    var pageUrl = location.origin + location.pathname
-    var message = shareMenu.getAttribute('data-message') || document.title
-    var subject = shareMenu.getAttribute('data-subject') || document.title
-    var enc = encodeURIComponent
-    var urls = {
-      facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + enc(pageUrl),
-      x: 'https://x.com/intent/post?text=' + enc(message) + '&url=' + enc(pageUrl),
-      linkedin: 'https://www.linkedin.com/feed/?shareActive=true&text=' + enc(message + ' ' + pageUrl),
-      whatsapp: 'https://wa.me/?text=' + enc(message + ' ' + pageUrl),
-      telegram: 'https://t.me/share/url?url=' + enc(pageUrl) + '&text=' + enc(message),
-      email: 'mailto:?subject=' + enc(subject) + '&body=' + enc(message + '\n\n' + pageUrl),
-      sms: 'sms:?&body=' + enc(message + ' ' + pageUrl)
-    }
-    Array.prototype.forEach.call(shareMenu.querySelectorAll('a[data-share]'), function (a) {
-      var key = a.getAttribute('data-share')
-      if (urls[key]) a.setAttribute('href', urls[key])
-      if (key === 'email' || key === 'sms') a.removeAttribute('target')
-    })
-    function setOpen(open) {
-      shareMenu.hidden = !open
-      shareToggle.setAttribute('aria-expanded', open ? 'true' : 'false')
-    }
-    shareToggle.addEventListener('click', function () { setOpen(shareMenu.hidden) })
-    document.addEventListener('click', function (e) { if (!share.contains(e.target)) setOpen(false) })
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setOpen(false); shareToggle.focus() } })
-    shareMenu.addEventListener('click', function (e) {
-      var item = e.target.closest('a[data-share]')
-      if (!item) return
-      track('share', { method: item.getAttribute('data-share'), content_type: 'release' })
-      setOpen(false)
-    })
-  }
+  // The "Share this page" and "More actions" menus are Base UI menus (client/islands.jsx).
 
   // "Did this page help you?": one vote per release per browser, remembered in
   // localStorage; each vote (and any change of mind) goes to analytics.
@@ -109,26 +72,6 @@
       })
     })
     showVote(readVote())
-  }
-
-  // "More actions" menu: open the markdown export in an AI assistant.
-  var actions = document.querySelector('.actions')
-  if (actions) {
-    var actionsToggle = actions.querySelector('.actions-toggle')
-    var actionsMenu = actions.querySelector('.actions-menu')
-    function setActionsOpen(open) {
-      actionsMenu.hidden = !open
-      actionsToggle.setAttribute('aria-expanded', open ? 'true' : 'false')
-    }
-    actionsToggle.addEventListener('click', function () { setActionsOpen(actionsMenu.hidden) })
-    document.addEventListener('click', function (e) { if (!actions.contains(e.target)) setActionsOpen(false) })
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setActionsOpen(false) })
-    actionsMenu.addEventListener('click', function (e) {
-      var item = e.target.closest('a[data-action]')
-      if (!item) return
-      track('open_in_ai', { assistant: item.getAttribute('data-action') })
-      setActionsOpen(false)
-    })
   }
 
   var exportLink = document.querySelector('.rail-actions .export-link')
