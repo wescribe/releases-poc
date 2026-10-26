@@ -5,8 +5,6 @@ date: 2026-09-01
 version: 2.18.0
 hero: /images/releases/instant-win-sweepstakes.png
 ---
-:::::columns
-::::column
 ## Sweepstakes
 
 The sweepstakes functionality first built for a national sponsor's game-day promotion is live and ready for use by other organizations.
@@ -16,17 +14,12 @@ The sweepstakes functionality first built for a national sponsor's game-day prom
 - **Dynamic page content.** The page a visitor lands on isn't one static page. It is personalized in real time based on their outcome (win, lose, already played, region-specific content, and so on), pulling in the right message, prize details, or next steps automatically.
 - **Two ways to pick a winner.** Either fixed odds rolled the moment someone plays, like a scratch ticket, or prizes secretly pre-scheduled to random moments in time, won by whoever plays first after that moment hits. The second option was added to satisfy a sponsor's legal requirement to avoid gambling-style odds.
 - **Campaign configurations.** Age minimums, entry limits, odds, and scheduling are all settings on the campaign. No engineering work is needed to launch a new sweepstakes.
-::::
-::::column
-![Scan a code, confirm your age, see your result](/images/releases/instant-win-sweepstakes-shot-1.svg)
 
 :::callout{type=tip}
 **Built to be provably fair.** The randomness is tested and documented to the same standard the gaming industry uses, so if a result is ever challenged, Spokenote can prove it wasn't rigged.
 
 **Nothing can be faked or double-counted.** Fraud and bot checks gate entries, every play is permanently logged, and safeguards stop duplicate plays or leftover prizes from accidentally rolling over to give someone an extra win.
 :::
-::::
-:::::
 
 :::::columns
 ::::column

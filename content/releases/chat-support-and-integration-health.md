@@ -5,18 +5,11 @@ date: 2026-07-14
 version: 2.17.0
 hero: /images/releases/support-chat-knowledge-base.png
 ---
-:::::columns
-::::column
 ## Support
 
 **Chat Support.** Under the profile dropdown, "Help" has been renamed to "Chat Support".
 
 **Knowledge Base.** A separate link under the profile dropdown opens the Knowledge Base in a new browser tab.
-::::
-::::column
-![Profile menu with Chat Support and Knowledge Base](/images/releases/chat-support-and-integration-health-shot-1.svg)
-::::
-:::::
 
 :::::columns
 ::::column

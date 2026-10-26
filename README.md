@@ -65,7 +65,7 @@ The build fails with a message naming the file and the field if `title`, `summar
 
 Layout uses the [remark-directive](https://github.com/remarkjs/remark-directive) container syntax: a fence line of three or more colons and a name, content, then a closing fence of the same length. Nested containers use more colons on the outer fence, the same way fenced code blocks nest.
 
-This is the opening of the v2.19.0 release, copied from `content/releases/draft-pages-before-you-publish.md`:
+This is the opening of the v2.19.0 release, adapted from `content/releases/draft-pages-before-you-publish.md`:
 
 ```markdown
 :::::columns
@@ -203,7 +203,7 @@ build/
 content/
   index.md        index page title and meta description (no visible intro)
   releases/*.md   one file per release; file name is the slug
-  images/         committed SVG placeholders
+  images/         committed screenshots and covers
   source/*.txt    the original plain-text release notes, the source of truth for content
 scripts/
   make-placeholder.js   deterministic abstract SVG generator
