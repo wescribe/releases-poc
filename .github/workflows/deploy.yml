@@ -27,8 +27,8 @@ jobs:
       - run: npm test
       - run: npm run build
         env:
-          BASE_PATH: /releases-poc/
-          SITE_URL: https://wescribe.github.io
+          BASE_PATH: /
+          SITE_URL: https://updates.spokenote.com
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

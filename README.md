@@ -2,7 +2,7 @@
 
 A static proof of concept for visually rich product release notes. Each release is a markdown file with a handful of layout directives. A small Node build renders those files into a Mintlify-style site and, beside every page, writes a plain-markdown export with all layout stripped out.
 
-The example content is Spokenote's release notes. The site is deployed to GitHub Pages at https://wescribe.github.io/releases-poc/.
+The example content is Spokenote's release notes. The site is deployed to GitHub Pages at https://updates.spokenote.com/.
 
 This README covers the content model, the stored format, the export rules, the three format options we weighed, and how the project is built and deployed. The editor question for the real product is in [docs/editor-approach.md](docs/editor-approach.md). Loose ideas live in [IDEAS.md](IDEAS.md). The design that this code implements is in [docs/superpowers/specs/2026-10-17-release-notes-poc-design.md](docs/superpowers/specs/2026-10-17-release-notes-poc-design.md).
 
@@ -18,11 +18,13 @@ npm test           # node --test
 npm run build      # writes dist/
 ```
 
-Set `BASE_PATH` when the site will not be served from the domain root, and `SITE_URL` to the scheme and host so Open Graph and canonical URLs are absolute. `npm run build` includes the Google Analytics tag by default; set `GA_ID` to use a different measurement id, or to an empty string to leave it out. The dev server leaves analytics out unless `GA_ID` is set. GitHub Pages serves this repository from `/releases-poc/`:
+Set `BASE_PATH` when the site will not be served from the domain root, and `SITE_URL` to the scheme and host so Open Graph and canonical URLs are absolute. `npm run build` includes the Google Analytics tag by default; set `GA_ID` to use a different measurement id, or to an empty string to leave it out. The dev server leaves analytics out unless `GA_ID` is set. Production is served from the root of the custom domain, so the deploy builds with:
 
 ```bash
-BASE_PATH=/releases-poc/ SITE_URL=https://wescribe.github.io npm run build
+BASE_PATH=/ SITE_URL=https://updates.spokenote.com npm run build
 ```
+
+A subpath host still works, for example `BASE_PATH=/releases-poc/` for the repository's default GitHub Pages URL.
 
 ## What the POC proves
 
@@ -244,7 +246,7 @@ Feedback votes are also kept in the visitor's localStorage under `feedback:<rele
 
 The pages are static HTML. `site/theme.js` is plain, dependency-free JavaScript for the theme toggle, menus, carousels, scroll-spy and the section flash. Richer widgets are React islands in `client/islands.jsx`, built with [Base UI](https://base-ui.com/) components and bundled by esbuild into `dist/assets/islands.js` as part of `npm run build`. An island finds its server-rendered element and takes it over, so the page still reads without JavaScript. The islands so far are the tooltip on each heading's copy-link button, the full-screen image viewer (a Base UI dialog opened by the button the build places over every content image), and the rail's "Share this page" and "More actions" dropdowns (Base UI menus whose popups render in a portal and stay inside the viewport); add new Base UI widgets there.
 
-A GitHub Actions workflow runs on every push to `main`: install, test, build with `BASE_PATH=/releases-poc/`, and deploy `dist/` to GitHub Pages. `dist/` is never committed. The repository's Pages source must be set to GitHub Actions.
+A GitHub Actions workflow runs on every push to `main`: install, test, build for the domain root with `SITE_URL=https://updates.spokenote.com`, and deploy `dist/` to GitHub Pages. `dist/` is never committed. The repository's Pages source must be set to GitHub Actions, with `updates.spokenote.com` as its custom domain and HTTPS enforced.
 
 Every link and asset URL in the templates is prefixed by the base path, and root-relative paths inside content such as `/images/...` are rewritten in the HTML at build time, so the same content works at the domain root in development and under the repository subpath in production. The markdown export is not rewritten; see Export rules.
 
