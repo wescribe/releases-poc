@@ -19,28 +19,28 @@ hero: /images/releases/page-templates-and-drag-and-drop.png
 
 ## New block types
 
-The page builder goes beyond video, images, and buttons to offer:
+The page builder goes beyond video, images, and buttons to offer additional content types. These new blocks can be combined in any order on the page.
 
 ::::carousel-list
-:::item{image=/images/releases/blocks/contact-card.svg alt="Contact Card block"}
+:::item{image=/images/releases/blocks/contact-card.png alt="Contact Card block"}
 **Contact Card** with a photo, name, title, and ways to get in touch.
 :::
-:::item{image=/images/releases/blocks/link-list.svg alt="Link List block"}
+:::item{image=/images/releases/blocks/link-list.png alt="Link List block"}
 **Link List** where each row can be a link, an email, a phone call, a text message, or an address.
 :::
-:::item{image=/images/releases/blocks/meeting-scheduler.svg alt="Meeting scheduler block"}
+:::item{image=/images/releases/blocks/meeting-scheduler.png alt="Meeting scheduler block"}
 **Meeting scheduler** for Calendly and HubSpot Meetings, one of each per page.
 :::
-:::item{image=/images/releases/blocks/text.svg alt="Text block"}
+:::item{image=/images/releases/blocks/text.png alt="Text block"}
 **Text** with headings, lists, links, bold and italics, and your choice of alignment.
 :::
-:::item{image=/images/releases/blocks/social-follow.svg alt="Social Follow block"}
+:::item{image=/images/releases/blocks/social-follow.png alt="Social Follow block"}
 **Social Follow** so visitors can find and follow your social profiles.
 :::
-:::item{image=/images/releases/blocks/share-page.svg alt="Share Page block"}
+:::item{image=/images/releases/blocks/share-page.png alt="Share Page block"}
 **Share Page** so visitors can send your page to others on their own networks.
 :::
-:::item{image=/images/releases/blocks/spacer-divider.svg alt="Spacer and Divider blocks"}
+:::item{image=/images/releases/blocks/spacer-divider.png alt="Spacer and Divider blocks"}
 **Spacer** and **Divider** for layout.
 :::
 ::::

@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Text block">
-<defs><linearGradient id="g" gradientTransform="rotate(309 0.5 0.5)"><stop offset="0" stop-color="#f0fdf4"/><stop offset="1" stop-color="#e0e7ff"/></linearGradient></defs>
-<rect width="1200" height="900" fill="url(#g)"/>
-<rect x="531" y="379.5" width="848" height="333" rx="83" fill="#a5b4fc" opacity="0.30"/>
-<circle cx="900" cy="294" r="382" fill="#a5b4fc" opacity="0.38"/>
-<circle cx="421" cy="180" r="164" fill="#a5b4fc" opacity="0.52"/>
-<text x="60" y="828" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="41" font-weight="600" fill="#0f172a" opacity="0.7">Text block</text>
-</svg>
