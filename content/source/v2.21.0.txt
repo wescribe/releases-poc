@@ -1,0 +1,60 @@
+v2.21.0 Release Notes
+----------
+Supplied 2026-11-17 as finished markdown
+
+## Video thumbnails
+
+- **Choose a frame.** Open a video in the Media Library or in the page editor's video form, and pick any of its frames from the strip of stills. Pages you publish or republish afterwards use it as the video poster.
+- **Upload your own.** Click the Upload tile at the start of the strip, or drop a JPEG, PNG, WebP, or GIF on it. The image belongs to the video and stays out of your Media Library. The × on its tile returns the video to its default thumbnail.
+
+## Page editor
+
+- **Block styling.** A new Styling section in each block's panel. Images get rounded corners and alignment. Buttons get three sizes, a border, and a transparent background. Videos get a max width, rounded corners, and their own play and pause button colors. A setting that would make no visible difference is greyed out and says why on hover.
+- **Alt text for images.** Image blocks have an Alt Text field. Links inside text blocks now take the text's own color, underlined.
+- **Share Preview.** A new tab sets what a shared link shows: a title, a description, and a preview image. The image can be a screenshot of the page, any image or video on the page, an upload, or an image from the Media Library. The same image shows on page cards, Page Overview, and email embeds.
+- **Right-click a block** in the preview to move it up or down, duplicate it, or delete it.
+- **Delete or Backspace** removes the selected block. Undo brings it back.
+- **Crop photos to a square.** On a Contact Card, your avatar, or the company avatar, pick which square of the photo shows, and adjust it later without uploading again.
+- **A tidier Media Library.** Media you upload or record in an editor enters the library when you save a draft, publish, or save a template that uses it. A recording you throw away stays out.
+
+## Pages and campaigns
+
+- **See what is live.** Each page and campaign card shows **Draft**, **Published**, or **Partially published**, and the campaigns table has a Publishing column. A live page with a saved draft shows that draft as its own row, with an Edit button.
+- **Status filter.** The Pages list filters by All, Published, or Drafts.
+- **Save Draft knows when there is something to save.** The button is available only when you have unsaved changes, and its tooltip says why when it is off.
+
+## Campaigns
+
+- **Page names.** Every page a campaign creates gets a name from a pattern, which starts as **{{SN_CAMPAIGN}} {{SN_UNIT}}**. Change the pattern on Campaign Overview to rename every page.
+- **Start with a page template.** A collectively managed campaign can start from one of your page templates, for workspaces with Page Templates.
+- **Choose the owner.** An Owner dropdown replaces "Assign me as the page owner." The person you choose owns the campaign and every page it creates.
+- **Transfer with a new owner.** When you move a campaign to another workspace, choose who owns it there. You are warned before any page owner changes.
+- **Large campaigns save in one go.** Campaigns of any size, up to 30,000 pages, save drafts and publish without an error.
+
+## Analytics
+
+- **Bots no longer count.** Page loads, video plays, clicks, sessions, and the Real Time list leave out visits flagged as automated browsers, such as crawlers and link previewers. Your numbers from this release on may be lower, and closer to real visitors.
+- **vCard Downloads.** Campaign analytics, a page's Analytics tab, and the Dashboard count contact card downloads, next to page loads, video plays, and clicks.
+- **Meeting scheduler activity.** Calendly and HubSpot Meetings blocks record **Scheduler Engaged** and **Meeting Booked**. Nothing about the visitor or the meeting is stored.
+- **More clicks counted.** Linked images and links inside text blocks now count as clicks.
+- **Totals that agree.** A page's Analytics tab shows the same totals as the Pages list and the Dashboard.
+- **Tracking parameters on more links.** Links on images, Link List rows, text blocks, and Contact Card websites carry the page's tracking parameters, as buttons already did.
+- **Edit bar.** The bar on a live page shows its session count, with page loads, video plays, and clicks on hover.
+
+## Workspace
+
+- **Verify your email.** The notice now sits at the top of the Dashboard. Until you verify, buttons that create or change content stay visible but greyed out, and hovering explains why. If you already have an account and accept an invite sent to that address, you are verified.
+- **Edit bar.** Edit Page opens the page editor directly, and Hide Edit Bar is now a small ×. Workspace members see the bar on every page, including pages waiting for their first upload.
+- **Unsaved media warning.** If you leave a page with media you have picked or recorded but not published, Spokenote asks you to Leave or Stay.
+- **Faster-feeling loading.** Main screens show a gray outline of the screen while they load, instead of "Loading...".
+- **Fewer scrollbars.** Scroll areas use one slim scrollbar that appears only while you hover or scroll.
+
+## Bug Fixes
+
+- Video Editor sections can be dragged again in Safari on a Mac and in every browser on phones and tablets.
+- Page templates keep empty clip sections. A template saved before this release has lost them: save it again from the page to get them back.
+- Email embed thumbnails show portrait phone photos upright.
+- A video recorded in the page builder is saved to the Media Library once, not twice.
+- Signing up with an email that is already in use says so, instead of showing an internal error.
+- Text block quotes and combined formatting save correctly, and Button and Image links handle spaces.
+- Views of a page that has no content yet no longer show in activity lists or add to Sessions.

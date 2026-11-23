@@ -9,6 +9,12 @@ import { exportMarkdown } from '../build/export.js'
 // options.omit: lead-ins deliberately left out of the public page
 // options.leadIn: regex whose first group is an item's lead-in (default: text before " - ")
 const pairs = [
+  ['v2.21.0', 'spokenote-one-thumbnails-and-block-styling', '2.21.0', {
+    // The source is supplied as markdown, so lead-ins are the bold text that opens each item.
+    leadIn: /^- \*\*(.+?)\.?\*\*/gm,
+    // Folded into Block styling on the public page on 2026-11-17.
+    omit: ['Alt text for images', 'Crop photos to a square'],
+  }],
   ['v2.20.0', 'page-templates-and-drag-and-drop', '2.20.0', {
     leadIn: /^(.+?)\. /gm,
     // Cut or reworded on the public page on 2026-10-22.
